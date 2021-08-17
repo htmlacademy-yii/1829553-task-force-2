@@ -1,0 +1,16 @@
+{
+    "name": "mar4ehk0/taskforce",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Alex",
+            "email": "mar4ehk0@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "Mar4hk0\\": "src/"
+      }
+    }
+}
