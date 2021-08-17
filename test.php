@@ -1,6 +1,8 @@
 <?php
 
-require_once "./Task.php";
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Mar4hk0\Models\Task;
 
 // В php.ini установил значения:
 // - zend.assertions = 1
@@ -55,4 +57,4 @@ assert(
     'Test8: failed function getDeadline'
 );
 
-
+echo 'All tests passed' . PHP_EOL;

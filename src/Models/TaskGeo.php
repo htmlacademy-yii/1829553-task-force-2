@@ -1,5 +1,7 @@
 <?php
 
+namespace Mar4hk0\Models;
+
 class TaskGeo
 {
     private int $idCity;

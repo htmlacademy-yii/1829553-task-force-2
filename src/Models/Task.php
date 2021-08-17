@@ -1,6 +1,6 @@
 <?php
 
-require_once "./TaskGeo.php";
+namespace Mar4hk0\Models;
 
 class Task
 {
