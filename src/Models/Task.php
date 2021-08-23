@@ -18,6 +18,7 @@ class Task
 
     private string $status = self::STATUS_NEW;
 
+    private int $id;
     private ?int $idSpecialist;
     private int $idCustomer;
     private int $price;
@@ -87,43 +88,28 @@ class Task
         return $status;
     }
 
-    public function getActionsByStatus(string $status, int $userID): ?array
+    public function getActionsByStatus(string $status, int $idCurrentUser): array
     {
-
-        // Если заказчик, то доступны действия:
-        // Отменить, Принять, Завершить
-        if ($this->idCustomer == $userID) {
-            // Если статус "Новое",
-            // то возможные действия для заказчика
-            // Отменить, Принять
-            if ($status == self::STATUS_NEW) {
-                return [self::ACTION_CANCEL, self::ACTION_START];
-            }
-            // Если статус "В работе",
-            // то возможные действия для заказчика
-            // Выполнено
-            if ($status == self::STATUS_IN_PROGRESS) {
-                return [self::ACTION_FINISH];
+        $actions = [];
+        $allowedActions = [];
+        if ($status == self::STATUS_NEW) {
+            $allowedActions = array_merge($allowedActions, [new CancelAction(), new RespondAction()]);
+            // Если есть отклики, то еще может быть действие "Старт задания"
+            $respond = new Respond();
+            if ($respond->hasRespond($this->id)) {
+                $allowedActions[] = new StartAction();
             }
         }
-        // Если исполнитель, то доступны действия:
-        // Откликнуться, Отказаться
-        elseif ($this->idSpecialist == $userID) {
-            // Если статус "Новое",
-            // то возможные действия для исполнителя
-            // Откликнуться
-            if ($status == self::STATUS_NEW) {
-                return [self::ACTION_RESPOND];
-            }
-            // Если статус "В работе",
-            // то возможные действия для исполнителя
-            // Отказаться
-            if ($status == self::STATUS_IN_PROGRESS) {
-                return [self::ACTION_CANCEL];
-            }
+        if ($status == self::STATUS_IN_PROGRESS) {
+            $allowedActions = array_merge($allowedActions, [new RefuseAction(), new FinishAction()]);
         }
 
-        return null;
+        foreach ($allowedActions as $action) {
+            if ($action->checkPermissions($this->idSpecialist, $this->idCustomer, $idCurrentUser)) {
+                $actions[] = $action;
+            }
+        }
+        return $actions;
     }
 
     public function getStatus(): string
