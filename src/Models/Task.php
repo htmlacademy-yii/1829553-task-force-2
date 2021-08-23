@@ -207,4 +207,24 @@ class Task
         return $this->idCustomer;
     }
 
+    public function getIdSpecialist(): ?int
+    {
+        return $this->idSpecialist;
+    }
+
+    public function setIdSpecialist(?int $idSpecialist): void
+    {
+        $this->idSpecialist = $idSpecialist;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
 }
