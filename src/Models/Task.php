@@ -2,6 +2,8 @@
 
 namespace Mar4hk0\Models;
 
+use Mar4hk0\Exceptions\ExceptionTask;
+
 class Task
 {
     public const STATUS_NEW = 'new';
@@ -63,6 +65,9 @@ class Task
         ];
     }
 
+    /**
+     * @throws ExceptionTask
+     */
     public function getNextStatus(string $action): ?string
     {
         $status = null;
@@ -85,9 +90,17 @@ class Task
                 $status = self::STATUS_FAILED;
             }
         }
+        if (empty($status)) {
+            throw new ExceptionTask(
+                'Could not get Status by action: ' . $action . '. Current status: ' . $this->getStatus()
+            );
+        }
         return $status;
     }
 
+    /**
+     * @throws ExceptionTask
+     */
     public function getActionsByStatus(string $status, int $idCurrentUser): array
     {
         $actions = [];
@@ -102,6 +115,12 @@ class Task
         }
         if ($status == self::STATUS_IN_PROGRESS) {
             $allowedActions = array_merge($allowedActions, [new RefuseAction(), new FinishAction()]);
+        }
+
+        if (empty($allowedActions)) {
+            throw new ExceptionTask(
+                'Could not get Action by status: ' . $status . ' and idCurrentUser:' . $idCurrentUser
+            );
         }
 
         foreach ($allowedActions as $action) {
