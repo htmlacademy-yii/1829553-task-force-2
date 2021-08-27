@@ -2,6 +2,8 @@
 
 namespace Mar4hk0\Fakers;
 
+use Mar4hk0\Exceptions\ExceptionContentFakeFactory;
+
 class ContentFakeFactory
 {
     public static function generate(string $type)
@@ -29,8 +31,7 @@ class ContentFakeFactory
                 $result = self::generateBool();
                 break;
             default:
-                // TODO throw exception
-                return null;
+                throw new ExceptionContentFakeFactory();
 
         }
         return $result;
