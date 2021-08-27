@@ -1,0 +1,103 @@
+db:
+  user: root
+  password: admin
+convert_type: MySQL
+path_to_source_data: /../../data/
+path_to_destination_data: /../../DB/
+files_name:
+  skills: categories.csv
+  cities: cities.csv
+  reviews: opinions.csv
+  users: users.csv
+  responds: replies.csv
+  tasks: tasks.csv
+
+struct_tables:
+  skills:
+#   column name in MySQL
+    name:
+#     column name CSV : type in MySQL
+      name: varchar
+    icon:
+      icon: varchar
+  cities:
+    name:
+      city: varchar
+  reviews:
+    id_task:
+      empty: int
+    review:
+      description: string
+    grade:
+      rate: int
+    created:
+      dt_add: date
+  users:
+    name:
+      name: string
+    email:
+      email: string
+    birthday:
+      empty: date
+    password:
+      password: string
+    about:
+      empty: text
+    hide_profile:
+      empty: bool
+    hide_contacts:
+      empty: bool
+    id_role:
+      empty: int
+    id_city:
+      empty: int
+    rating:
+      empty: float
+    phone:
+      empty: string
+    skype:
+      empty: string
+    telegram:
+      empty: string
+    created:
+      dt_add: date
+  responds:
+    id_specialist:
+      empty: int
+    description:
+      description: string
+    rate:
+      rate: int
+    id_task:
+      empty: int
+    rejected:
+      empty: bool
+    created:
+      dt_add: bool
+  tasks:
+    id_specialist:
+      empty: int
+    id_customer:
+      empty: int
+    name:
+      name: string
+    description:
+      description: string
+    price:
+      budget: int
+    deadline:
+      expire: date
+    remote:
+      empty: bool
+    id_skill:
+      empty: int
+    id_city:
+      empty: int
+    longitude:
+      long: string
+    latitude:
+      lat: string
+    address:
+      empty: string
+    created:
+      dt_add: date
