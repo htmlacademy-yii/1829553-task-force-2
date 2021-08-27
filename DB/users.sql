@@ -1,0 +1,22 @@
+INSERT users (name, email, birthday, password, about, hide_profile, hide_contacts, id_role, id_city, rating, phone, skype, telegram, created)
+VALUES
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date),
+(string, 'string', date, string, text, bool, bool, int, int, float, string, string, string, date);

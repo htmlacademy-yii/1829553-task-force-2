@@ -1,0 +1,22 @@
+INSERT responds (id_specialist, description, rate, id_task, rejected, created)
+VALUES
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool),
+(int, string, int, int, bool, bool);
