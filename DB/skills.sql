@@ -1,10 +1,10 @@
 INSERT skills (name, icon)
 VALUES
-(varchar, varchar),
-(varchar, varchar),
-(varchar, varchar),
-(varchar, varchar),
-(varchar, varchar),
-(varchar, varchar),
-(varchar, varchar),
-(varchar, varchar)
+('Переводы', 'translation'),
+('Уборка', 'clean'),
+('Переезды', 'cargo'),
+('Компьютерная помощь', 'neo'),
+('Ремонт квартирный', 'flat'),
+('Ремонт техники', 'repair'),
+('Красота', 'beauty'),
+('Фото', 'photo');

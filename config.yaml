@@ -17,9 +17,9 @@ struct_tables:
 #   column name in MySQL
     name:
 #     column name CSV : type in MySQL
-      name: varchar
+      name: string
     icon:
-      icon: varchar
+      icon: string
   cities:
     name:
       city: varchar
