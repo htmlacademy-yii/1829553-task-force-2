@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `skills`;
 CREATE TABLE `skills` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
+  `icon` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `s_name_unique` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
