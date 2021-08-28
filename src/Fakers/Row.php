@@ -27,7 +27,7 @@ class Row
             if (!empty($this->data[$columnCSV])) {
                 $value = $this->data[$columnCSV];
             }
-            $this->items[] = new Item($columnMySQL, $type, $value);
+            $this->items[] = new Item($type, $value);
         }
     }
 
