@@ -51,10 +51,10 @@ class Notification extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_user' => 'Id User',
-            'new_message' => 'New Message',
-            'actions_task' => 'Actions Task',
-            'new_reviews' => 'New Reviews',
+            'id_user' => 'ID Пользователя',
+            'new_message' => 'На новое сообщение',
+            'actions_task' => 'Действия в задаче',
+            'new_reviews' => 'На новый отзыв',
         ];
     }
 
