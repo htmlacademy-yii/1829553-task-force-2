@@ -18,13 +18,9 @@ $cityIds = City::find()
     ->select('id')
     ->column();
 
-$roleFixture = new RoleFixture();
-$specialistRoleID = $roleFixture->getRoleIDByName($roleFixture->getRoleNameSpecialist());
-$customerRoleID = $roleFixture->getRoleIDByName($roleFixture->getRoleNameCustomer());
-
 $userFixture = new UserFixture();
-$idSpecialist = $userFixture->getRandomUserIDByRole($specialistRoleID);
-$idCustomer = $userFixture->getRandomUserIDByRole($customerRoleID);
+$idSpecialist = $userFixture->getRandomIdSpecialist();
+$idCustomer = $userFixture->getRandomIdCustomer();
 
 $deadline = $faker->dateTimeBetween('+1 week', '+2 month')
     ->format('Y-m-d H:i:s');

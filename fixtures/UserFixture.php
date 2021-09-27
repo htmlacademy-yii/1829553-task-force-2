@@ -9,33 +9,35 @@ class UserFixture extends ActiveFixture
 {
     public $modelClass = 'app\models\User';
 
-    public function getRandomUserIDByRole(int $roleId)
+    public function getRandomIdSpecialist(): int
+    {
+        $roleFixture = new RoleFixture();
+        $specialistRoleID = $roleFixture
+            ->getRoleIDByName($roleFixture->getRoleNameSpecialist());
+
+        return $this->getRandomIdUser($specialistRoleID);
+    }
+
+    public function getRandomIdCustomer(): int
+    {
+        $roleFixture = new RoleFixture();
+        $customerRoleID = $roleFixture
+            ->getRoleIDByName($roleFixture->getRoleNameCustomer());
+
+        return $this->getRandomIdUser($customerRoleID);
+    }
+
+    private function getRandomIdUser(int $idRole): int
     {
         $userIds = User::find()
             ->select('id')
-            ->where(['id_role' => $roleId])
+            ->where(['id_role' => $idRole])
             ->column();
 
         return $this->getRandomItemFromArray($userIds);
     }
 
-    private function getRandomUserID(?int $busedUserID = null)
-    {
-        $userIds = User::find()
-            ->select('id')
-            ->column();
-
-        if (empty($busedUserID)) {
-            return $this->getRandomItemFromArray($userIds);
-        }
-
-        do {
-            $userID = $this->getRandomItemFromArray($userIds);
-        } while ($userID == $busedUserID);
-        return $userID;
-    }
-
-    private function getRandomItemFromArray(array $data)
+    private function getRandomItemFromArray(array $data): int
     {
         $key = array_rand($data);
         return $data[$key];
