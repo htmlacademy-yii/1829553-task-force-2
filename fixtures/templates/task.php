@@ -32,7 +32,7 @@ $name = $data['name'];
 $description = $data['description'];
 
 return [
-    'id_specialist' => $idSpecialist,
+    'id_specialist' => $faker->boolean() ? $idSpecialist : null,
     'id_customer' => $idCustomer,
     'name' => $name,
     'description' => $description,

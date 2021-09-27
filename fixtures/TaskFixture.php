@@ -9,6 +9,5 @@ class TaskFixture extends ActiveFixture
     public $modelClass = 'app\models\Task';
     public $depends = [
         'app\fixtures\UserFixture',
-        'app\fixtures\RoleFixture',
     ];
 }
