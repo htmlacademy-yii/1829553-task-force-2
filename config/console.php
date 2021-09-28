@@ -54,6 +54,7 @@ if (YII_ENV_DEV) {
             'providers' => [
                 'app\fixtures\providers\User',
                 'app\fixtures\providers\Task',
+                'app\fixtures\providers\Respond',
             ],
 
         ],
