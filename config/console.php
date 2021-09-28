@@ -55,6 +55,7 @@ if (YII_ENV_DEV) {
                 'app\fixtures\providers\User',
                 'app\fixtures\providers\Task',
                 'app\fixtures\providers\Respond',
+                'app\fixtures\providers\Review',
             ],
 
         ],
