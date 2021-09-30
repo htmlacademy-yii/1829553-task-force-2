@@ -9,7 +9,7 @@ class UserFixture extends ActiveFixture
 {
     public $modelClass = 'app\models\User';
 
-    public function getAllIdSpecialist(): array
+    public function getAllSpecialistId(): array
     {
         $roleFixture = new RoleFixture();
         $specialistRoleID = $roleFixture
@@ -20,25 +20,25 @@ class UserFixture extends ActiveFixture
             ->column();
     }
 
-    public function getRandomIdSpecialist(): int
+    public function getRandomSpecialistId(): int
     {
         $roleFixture = new RoleFixture();
         $specialistRoleID = $roleFixture
             ->getRoleIDByName($roleFixture->getRoleNameSpecialist());
 
-        return $this->getRandomIdUser($specialistRoleID);
+        return $this->getRandomUserId($specialistRoleID);
     }
 
-    public function getRandomIdCustomer(): int
+    public function getRandomCustomerId(): int
     {
         $roleFixture = new RoleFixture();
         $customerRoleID = $roleFixture
             ->getRoleIDByName($roleFixture->getRoleNameCustomer());
 
-        return $this->getRandomIdUser($customerRoleID);
+        return $this->getRandomUserId($customerRoleID);
     }
 
-    private function getRandomIdUser(int $idRole): int
+    private function getRandomUserId(int $idRole): int
     {
         $userIds = User::find()
             ->select('id')

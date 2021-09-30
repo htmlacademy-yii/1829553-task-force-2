@@ -19,8 +19,8 @@ $cityIds = City::find()
     ->column();
 
 $userFixture = new UserFixture();
-$idSpecialist = $userFixture->getRandomIdSpecialist();
-$idCustomer = $userFixture->getRandomIdCustomer();
+$specialistId = $userFixture->getRandomSpecialistId();
+$customerId = $userFixture->getRandomCustomerId();
 
 $deadline = $faker->dateTimeBetween('+1 week', '+2 month')
     ->format('Y-m-d H:i:s');
@@ -31,15 +31,15 @@ $data = $faker->getTaskData();
 $name = $data['name'];
 $description = $data['description'];
 
-$idSpecialist = $faker->boolean() ? $idSpecialist : null;
+$specialistId = $faker->boolean() ? $specialistId : null;
 $status = Task::NEW;
-if ($idSpecialist) {
+if ($specialistId) {
     $status = $faker->randomElement(Task::STATUSES);
 }
 
 return [
-    'id_specialist' => $idSpecialist,
-    'id_customer' => $idCustomer,
+    'id_specialist' => $specialistId,
+    'id_customer' => $customerId,
     'name' => $name,
     'description' => $description,
     'price' => rand(100, 80000),

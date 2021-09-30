@@ -9,7 +9,7 @@ use app\fixtures\UserFixture;
 use app\models\Task;
 
 $userFixture = new UserFixture();
-$specialistIds = $userFixture->getAllIdSpecialist();
+$specialistIds = $userFixture->getAllSpecialistId();
 $specialistId = $specialistIds[$index % count($specialistIds)];
 
 $created = $faker->dateTimeBetween('-2 weeks', '-1 week')

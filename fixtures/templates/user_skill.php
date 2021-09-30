@@ -9,7 +9,7 @@ use app\fixtures\UserFixture;
 use app\models\Skill;
 
 $userFixture = new UserFixture();
-$specialistIds = $userFixture->getAllIdSpecialist();
+$specialistIds = $userFixture->getAllSpecialistId();
 $specialistId = $specialistIds[$index % count($specialistIds)];
 
 $skills = Skill::find()->all();
