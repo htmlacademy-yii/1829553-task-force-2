@@ -5,10 +5,10 @@
  * @var $index integer
  */
 
-use app\fixtures\RoleFixture;
 use app\fixtures\UserFixture;
 use app\models\City;
 use app\models\Skill;
+use app\models\Task;
 
 $skillIds = Skill::find()
     ->select('id')
@@ -27,12 +27,18 @@ $deadline = $faker->dateTimeBetween('+1 week', '+2 month')
 $created = $faker->dateTimeBetween('-1 months', '-1 week')
     ->format('Y-m-d H:i:s');
 
-$data = $faker->getData();
+$data = $faker->getTaskData();
 $name = $data['name'];
 $description = $data['description'];
 
+$idSpecialist = $faker->boolean() ? $idSpecialist : null;
+$status = Task::NEW;
+if ($idSpecialist) {
+    $status = $faker->randomElement(Task::STATUSES);
+}
+
 return [
-    'id_specialist' => $faker->boolean() ? $idSpecialist : null,
+    'id_specialist' => $idSpecialist,
     'id_customer' => $idCustomer,
     'name' => $name,
     'description' => $description,
@@ -45,4 +51,5 @@ return [
     'latitude' => null,
     'address' => '',
     'created' => $created,
+    'status' => $status
 ];
