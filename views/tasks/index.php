@@ -7,36 +7,31 @@ use yii\helpers\StringHelper;
 
 $this->title = 'Новые задания';
 
-/* @var $tasks array of Task */
-/* @var $skills array of Skill, index property id */
-/* @var $cities array of City, index property id */
+/* @var $tasks array from function TaskService::index() */
 
 ?>
 <section class="new-task">
     <div class="new-task__wrapper">
         <h1><?= Html::encode($this->title) ?></h1>
         <?php foreach ($tasks as $key => $task) : ?>
-            <?php $skill = $skills[$task['id_skill']];?>
-            <?php $city = $cities[$task['id_city']];?>
             <div class="new-task__card">
                 <div class="new-task__title">
                     <a href="view.html" class="link-regular">
                         <h2><?= Html::encode($task['name']) ?></h2>
                     </a>
                     <a class="new-task__type link-regular" href="#">
-                        <p><?=Html::encode($skill->name)?></p>
+                        <p><?=Html::encode($task['skill_name'])?></p>
                     </a>
                 </div>
-                <div class="new-task__icon new-task__icon--<?=Html::encode($skill->icon)?>"></div>
+                <div class="new-task__icon new-task__icon--<?=Html::encode($task['skill_icon'])?>"></div>
                 <p class="new-task_description">
                     <?=Html::encode(StringHelper::truncateWords($task['description'], 15))?>
                 </p>
-                <b class="new-task__price new-task__price--<?=Html::encode($skill->icon)?>">
+                <b class="new-task__price new-task__price--<?=Html::encode($task['skill_icon'])?>">
                     <?= Html::encode($task['price']) ?>
                 <b> ₽</b></b>
-                <p class="new-task__place"><?= Html::encode($city->name) ?></p>
-<!--                <span class="new-task__time">4 часа назад</span>-->
-                <span class="new-task__time"><?= Html::encode($task['created']) ?></span>
+                <p class="new-task__place"><?= Html::encode($task['skill_icon']) ?></p>
+                <span class="new-task__time"><?= Html::encode($task['countdown_time']) ?></span>
             </div>
         <?php endforeach; ?>
     </div>
