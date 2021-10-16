@@ -35,6 +35,20 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    public const NEW = 'new';
+    public const CANCELED = 'canceled';
+    public const IN_PROGRESS = 'in_progress';
+    public const COMPLETED = 'completed';
+    public const FAILED = 'failed';
+
+    public const STATUSES = [
+        self::NEW,
+        self::CANCELED,
+        self::IN_PROGRESS,
+        self::COMPLETED,
+        self::FAILED
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +65,7 @@ class Task extends \yii\db\ActiveRecord
         return [
             [['id_specialist', 'id_customer', 'price', 'deadline', 'remote', 'id_skill', 'id_city'], 'integer'],
             [['id_customer', 'name', 'description', 'remote', 'id_skill', 'created'], 'required'],
-            [['description', 'address'], 'string'],
+            [['description', 'address', 'status'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['created'], 'safe'],
             [['name'], 'string', 'max' => 255],
@@ -106,6 +120,7 @@ class Task extends \yii\db\ActiveRecord
             'latitude' => 'Широта',
             'address' => 'Адрес',
             'created' => 'Создан',
+            'status' => 'Статус',
         ];
     }
 
@@ -209,5 +224,13 @@ class Task extends \yii\db\ActiveRecord
     public function getTaskFiles()
     {
         return $this->hasMany(TaskFile::className(), ['id_task' => 'id']);
+    }
+
+    /**
+     * Returns tasks by given status.
+     */
+    public static function getTasksByStatus(?string $status = null, int $sort = SORT_DESC): array
+    {
+        return Task::find(['status' => $status])->orderBy(['created' => $sort])->all();
     }
 }

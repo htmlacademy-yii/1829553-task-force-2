@@ -43,23 +43,6 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
     ];
-
-    $config['controllerMap'] = [
-        'fixture' => [
-            'class' => 'yii\faker\FixtureController',
-            'templatePath' => '@app/fixtures/templates',
-            'fixtureDataPath' => '@app/fixtures/data',
-            'language' => 'ru_RU',
-            'namespace' => 'app\fixtures',
-            'providers' => [
-                'app\fixtures\providers\User',
-                'app\fixtures\providers\Task',
-                'app\fixtures\providers\Respond',
-                'app\fixtures\providers\Review',
-            ],
-
-        ],
-    ];
 }
 
 return $config;
