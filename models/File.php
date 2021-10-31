@@ -5,18 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "file".
+ * This is the model class for table "files".
  *
  * @property int $id
+ * @property string $name
  * @property string $path
- * @property int $id_user
- * @property string $file_name
- * @property string $file_types
+ * @property int $client_id
+ * @property int $task_id
  * @property string $created
  *
- * @property TaskFile[] $taskFiles
- * @property Task[] $tasks
- * @property User $user
+ * @property Task $task
+ * @property Client $client
  */
 class File extends \yii\db\ActiveRecord
 {
@@ -25,7 +24,7 @@ class File extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'file';
+        return 'files';
     }
 
     /**
@@ -34,18 +33,14 @@ class File extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['path', 'id_user', 'file_name', 'file_types', 'created'], 'required'],
-            [['id_user'], 'integer'],
+            [['id', 'name', 'path', 'client_id', 'task_id', 'created'], 'required'],
+            [['id', 'client_id', 'task_id'], 'integer'],
             [['created'], 'safe'],
-            [['path', 'file_name'], 'string', 'max' => 255],
-            [['file_types'], 'string', 'max' => 100],
-            [
-                ['id_user'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => User::className(),
-                'targetAttribute' => ['id_user' => 'id']
-            ],
+            [['name', 'path'], 'string', 'max' => 255],
+            [['name', 'path'], 'unique', 'targetAttribute' => ['name', 'path']],
+            [['id'], 'unique'],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
+            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
 
@@ -56,42 +51,31 @@ class File extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'path' => 'Путь к файлу',
-            'id_user' => 'ID пользователя',
-            'file_name' => 'Название файла',
-            'file_types' => 'Тип файла',
-            'created' => 'Создан',
+            'name' => 'Name',
+            'path' => 'Path',
+            'client_id' => 'User ID',
+            'task_id' => 'Task ID',
+            'created' => 'Created',
         ];
     }
 
     /**
-     * Gets query for [[TaskFiles]].
+     * Gets query for [[Task]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTaskFiles()
+    public function getTask()
     {
-        return $this->hasMany(TaskFile::className(), ['id_file' => 'id']);
+        return $this->hasOne(Task::className(), ['id' => 'task_id']);
     }
 
     /**
-     * Gets query for [[Tasks]].
+     * Gets query for [[Client]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks()
+    public function getClient()
     {
-        return $this->hasMany(Task::className(), ['id' => 'id_task'])
-            ->viaTable('task_file', ['id_file' => 'id']);
-    }
-
-    /**
-     * Gets query for [[User]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'id_user']);
+        return $this->hasOne(Client::className(), ['id' => 'client_id']);
     }
 }
