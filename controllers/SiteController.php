@@ -9,7 +9,6 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use Mar4hk0\models\CancelAction;
 
 class SiteController extends Controller
 {
