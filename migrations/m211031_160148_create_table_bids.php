@@ -1,0 +1,52 @@
+<?php
+
+use yii\db\Migration;
+
+class m211031_160148_create_table_bids extends Migration
+{
+    public function safeUp()
+    {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
+        }
+
+        $this->createTable(
+            '{{%bids}}',
+            [
+                'id' => $this->primaryKey()->unsigned(),
+                'description' => $this->text()->notNull(),
+                'price' => $this->integer()->unsigned()->notNull(),
+                'task_id' => $this->integer()->unsigned()->notNull(),
+                'is_refused' => $this->boolean()->notNull(),
+                'performer_id' => $this->integer()->unsigned()->notNull(),
+                'created' => $this->dateTime()->notNull(),
+            ],
+            $tableOptions
+        );
+
+        $this->addForeignKey(
+            'bids_FK',
+            '{{%bids}}',
+            ['task_id'],
+            '{{%tasks}}',
+            ['id'],
+            'NO ACTION',
+            'NO ACTION'
+        );
+        $this->addForeignKey(
+            'bids_FK_1',
+            '{{%bids}}',
+            ['performer_id'],
+            '{{%users}}',
+            ['id'],
+            'NO ACTION',
+            'NO ACTION'
+        );
+    }
+
+    public function safeDown()
+    {
+        $this->dropTable('{{%bids}}');
+    }
+}
