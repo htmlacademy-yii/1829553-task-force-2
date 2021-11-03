@@ -52,7 +52,7 @@ if (YII_ENV_DEV) {
             'language' => 'ru_RU',
             'namespace' => 'app\fixtures',
             'providers' => [
-//                'app\fixtures\providers\User',
+                'app\fixtures\providers\User',
 //                'app\fixtures\providers\Task',
 //                'app\fixtures\providers\Bid',
 //                'app\fixtures\providers\Review',
