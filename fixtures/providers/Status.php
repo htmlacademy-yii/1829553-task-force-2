@@ -10,23 +10,23 @@ class Status extends Base
 
     private const STATUSES = [
         [
-            'system_name' => 'new',
+            'system_name' => \app\models\Status::STATUS_NEW,
             'human_name' => 'Новое',
         ],
         [
-            'system_name' => 'canceled',
+            'system_name' => \app\models\Status::STATUS_CANCELED,
             'human_name' => 'Отменено',
         ],
         [
-            'system_name' => 'in_process',
+            'system_name' => \app\models\Status::STATUS_IN_PROCESS,
             'human_name' => 'В работе',
         ],
         [
-            'system_name' => 'completed',
+            'system_name' => \app\models\Status::STATUS_COMPLETED,
             'human_name' => 'Выполнено',
         ],
         [
-            'system_name' => 'failed',
+            'system_name' => \app\models\Status::STATUS_FAILED,
             'human_name' => 'Провалено',
         ],
     ];
