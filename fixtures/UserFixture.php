@@ -2,22 +2,20 @@
 
 namespace app\fixtures;
 
+use app\models\User;
 use yii\test\ActiveFixture;
 
 class UserFixture extends ActiveFixture
 {
     public $modelClass = 'app\models\User';
 
-//    public function getAllSpecialistId(): array
-//    {
-//        $roleFixture = new RoleFixture();
-//        $specialistRoleID = $roleFixture
-//            ->getRoleIDByName($roleFixture->getRoleNameSpecialist());
-//        return User::find()
-//            ->select('id')
-//            ->where(['id_role' => $specialistRoleID])
-//            ->column();
-//    }
+    public function getAllPerformerId(): array
+    {
+        return User::find()
+            ->select('id')
+            ->where(['is_client' => !User::CLIENT])
+            ->column();
+    }
 //
 //    public function getRandomSpecialistId(): int
 //    {
