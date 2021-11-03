@@ -16,38 +16,30 @@ class UserFixture extends ActiveFixture
             ->where(['is_client' => !User::CLIENT])
             ->column();
     }
-//
-//    public function getRandomSpecialistId(): int
-//    {
-//        $roleFixture = new RoleFixture();
-//        $specialistRoleID = $roleFixture
-//            ->getRoleIDByName($roleFixture->getRoleNameSpecialist());
-//
-//        return $this->getRandomUserId($specialistRoleID);
-//    }
-//
-//    public function getRandomCustomerId(): int
-//    {
-//        $roleFixture = new RoleFixture();
-//        $customerRoleID = $roleFixture
-//            ->getRoleIDByName($roleFixture->getRoleNameCustomer());
-//
-//        return $this->getRandomUserId($customerRoleID);
-//    }
-//
-//    private function getRandomUserId(int $idRole): int
-//    {
-//        $userIds = User::find()
-//            ->select('id')
-//            ->where(['id_role' => $idRole])
-//            ->column();
-//
-//        return $this->getRandomItemFromArray($userIds);
-//    }
-//
-//    private function getRandomItemFromArray(array $data): int
-//    {
-//        $key = array_rand($data);
-//        return $data[$key];
-//    }
+
+    public function getRandomPerformerId(): int
+    {
+        return $this->getRandomUserId(false);
+    }
+
+    public function getRandomClientId(): int
+    {
+        return $this->getRandomUserId(true);
+    }
+
+    private function getRandomUserId(bool $is_client): int
+    {
+        $userIds = User::find()
+            ->select('id')
+            ->where(['is_client' => $is_client])
+            ->column();
+
+        return $this->getRandomItemFromArray($userIds);
+    }
+
+    private function getRandomItemFromArray(array $data): int
+    {
+        $key = array_rand($data);
+        return $data[$key];
+    }
 }
