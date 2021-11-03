@@ -1,0 +1,68 @@
+<?php
+
+return [
+    'reviews0' => [
+        'client_id' => 8,
+        'performer_id' => 8,
+        'task_id' => 4,
+        'description' => 'Опоздал, но сделал все отлично',
+        'grade' => 4,
+        'created' => '2021-10-24 15:19:32',
+    ],
+    'reviews1' => [
+        'client_id' => 3,
+        'performer_id' => 1,
+        'task_id' => 9,
+        'description' => 'Долго шел, работу сделал, криво-косо',
+        'grade' => 4,
+        'created' => '2021-10-24 03:08:54',
+    ],
+    'reviews2' => [
+        'client_id' => 7,
+        'performer_id' => 16,
+        'task_id' => 14,
+        'description' => 'Не пришел, не позвонил, потерялся',
+        'grade' => 2,
+        'created' => '2021-10-20 23:16:13',
+    ],
+    'reviews3' => [
+        'client_id' => 5,
+        'performer_id' => 18,
+        'task_id' => 19,
+        'description' => 'Все испортил!!!!',
+        'grade' => 1,
+        'created' => '2021-10-26 14:16:50',
+    ],
+    'reviews4' => [
+        'client_id' => 7,
+        'performer_id' => 1,
+        'task_id' => 24,
+        'description' => 'Не пришел, не позвонил, потерялся',
+        'grade' => 2,
+        'created' => '2021-10-27 00:25:15',
+    ],
+    'reviews5' => [
+        'client_id' => 4,
+        'performer_id' => 1,
+        'task_id' => 29,
+        'description' => 'Опоздал, но сделал все отлично',
+        'grade' => 4,
+        'created' => '2021-10-26 09:46:37',
+    ],
+    'reviews6' => [
+        'client_id' => 7,
+        'performer_id' => 11,
+        'task_id' => 34,
+        'description' => 'Не пришел, не позвонил, потерялся',
+        'grade' => 2,
+        'created' => '2021-10-23 17:01:18',
+    ],
+    'reviews7' => [
+        'client_id' => 6,
+        'performer_id' => 17,
+        'task_id' => 39,
+        'description' => 'Все сделал хорошо. Остался доволен',
+        'grade' => 5,
+        'created' => '2021-10-21 04:03:01',
+    ],
+];
