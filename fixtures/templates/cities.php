@@ -5,7 +5,7 @@
  * @var $index integer
  */
 
-$city = $faker->city($index);
+$city = $faker->getCityName($index);
 
 return [
     'name' => $city[0],

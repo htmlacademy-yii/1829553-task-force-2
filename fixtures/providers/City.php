@@ -3,11 +3,11 @@
 namespace app\fixtures\providers;
 
 use Faker\Generator;
-use Faker\Provider\Base;
+use Faker\Provider\ru_RU\Address;
 use yii\db\Exception;
 use SplFileObject;
 
-class City extends Base
+class City extends Address
 {
     private const FILE_PATH = __DIR__ . '/cities.csv';
     private SplFileObject $file;
@@ -45,12 +45,19 @@ class City extends Base
         return $this->cities;
     }
 
-    public function city(int $index)
+    public function getCityName(int $index)
     {
         $cities = $this->getCities();
         if (empty($cities[$index])) {
             throw new Exception('Wrong rows!');
         }
         return $cities[$index];
+    }
+
+    public function getStreetHouse()
+    {
+        $format = static::randomElement(Address::$streetAddressFormats);
+
+        return $this->generator->parse($format);
     }
 }
