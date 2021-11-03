@@ -53,7 +53,7 @@ if (YII_ENV_DEV) {
             'namespace' => 'app\fixtures',
             'providers' => [
                 'app\fixtures\providers\User',
-//                'app\fixtures\providers\Task',
+                'app\fixtures\providers\Task',
 //                'app\fixtures\providers\Bid',
 //                'app\fixtures\providers\Review',
                 'app\fixtures\providers\City',
