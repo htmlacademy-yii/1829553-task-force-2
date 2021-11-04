@@ -3,34 +3,34 @@
 return [
     'categories0' => [
         'human_name' => 'Переводы',
-        'icon' => 'translation',
+        'system_name' => 'translation',
     ],
     'categories1' => [
         'human_name' => 'Уборка',
-        'icon' => 'clean',
+        'system_name' => 'clean',
     ],
     'categories2' => [
         'human_name' => 'Переезды',
-        'icon' => 'cargo',
+        'system_name' => 'cargo',
     ],
     'categories3' => [
         'human_name' => 'Компьютерная помощь',
-        'icon' => 'neo',
+        'system_name' => 'neo',
     ],
     'categories4' => [
         'human_name' => 'Ремонт квартирный',
-        'icon' => 'flat',
+        'system_name' => 'flat',
     ],
     'categories5' => [
         'human_name' => 'Ремонт техники',
-        'icon' => 'repair',
+        'system_name' => 'repair',
     ],
     'categories6' => [
         'human_name' => 'Красота',
-        'icon' => 'beauty',
+        'system_name' => 'beauty',
     ],
     'categories7' => [
         'human_name' => 'Фото',
-        'icon' => 'photo',
+        'system_name' => 'photo',
     ],
 ];

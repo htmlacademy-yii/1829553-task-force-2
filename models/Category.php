@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $human_name
- * @property string $icon
+ * @property string $system_name
  *
  * @property Task[] $tasks
  * @property Performer[] $performers
@@ -31,9 +31,9 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['human_name', 'icon'], 'required'],
+            [['human_name', 'system_name'], 'required'],
             [['human_name'], 'string', 'max' => 100],
-            [['icon'], 'string', 'max' => 64],
+            [['system_name'], 'string', 'max' => 64],
             [['human_name'], 'unique'],
         ];
     }
@@ -46,7 +46,7 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'human_name' => 'Название',
-            'icon' => 'Icon',
+            'system_name' => 'system_name',
         ];
     }
 

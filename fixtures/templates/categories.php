@@ -9,5 +9,5 @@ $category = $faker->category($index);
 
 return [
     'human_name' => $category['human_name'],
-    'icon' => $category['icon'],
+    'system_name' => $category['system_name'],
 ];

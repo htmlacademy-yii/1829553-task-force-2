@@ -83,9 +83,9 @@ $this->title = 'Новые задания';
                             'value' => Html::encode($category->id),
                             'uncheck' => null,
                             'checked' => in_array($category->id, $taskSearchForm->filterCategories),
-                            'id' => Html::encode($category->icon),
+                            'id' => Html::encode($category->system_name),
                         ]) ?>
-                        <label class="control-label" for="<?=Html::encode($category->icon)?>">
+                        <label class="control-label" for="<?=Html::encode($category->system_name)?>">
                             <?=Html::encode($category->human_name)?>
                         </label>
                     </div>
