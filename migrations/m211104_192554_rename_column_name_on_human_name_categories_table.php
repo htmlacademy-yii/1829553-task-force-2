@@ -12,7 +12,7 @@ class m211104_192554_rename_column_name_on_human_name_categories_table extends M
      */
     public function safeUp()
     {
-        $this->renameColumn('categories', 'system_name', 'human_name');
+        $this->renameColumn('categories', 'name', 'human_name');
     }
 
     /**
