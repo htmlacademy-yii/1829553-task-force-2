@@ -10,35 +10,35 @@ class Category extends Base
 
     private const CATEGORIES = [
         [
-            'name' => 'Переводы',
+            'human_name' => 'Переводы',
             'icon' => 'translation',
         ],
         [
-            'name' => 'Уборка',
+            'human_name' => 'Уборка',
             'icon' => 'clean',
         ],
         [
-            'name' => 'Переезды',
+            'human_name' => 'Переезды',
             'icon' => 'cargo',
         ],
         [
-            'name' => 'Компьютерная помощь',
+            'human_name' => 'Компьютерная помощь',
             'icon' => 'neo',
         ],
         [
-            'name' => 'Ремонт квартирный',
+            'human_name' => 'Ремонт квартирный',
             'icon' => 'flat',
         ],
         [
-            'name' => 'Ремонт техники',
+            'human_name' => 'Ремонт техники',
             'icon' => 'repair',
         ],
         [
-            'name' => 'Красота',
+            'human_name' => 'Красота',
             'icon' => 'beauty',
         ],
         [
-            'name' => 'Фото',
+            'human_name' => 'Фото',
             'icon' => 'photo',
         ],
     ];

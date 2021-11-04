@@ -36,7 +36,7 @@ class TaskService
                 'title' => $task['title'],
                 'description' => $task['description'],
                 'price' => $task->getPriceHuman(),
-                'category_name' => $this->categories[$task['category_id']]->name,
+                'category_human_name' => $this->categories[$task['category_id']]->human_name,
                 'city_name' => $cities[$task['city_id']]->name,
                 'relative_time' => $this->convertTimeToRelativeTime($task['created']),
                 'created' => $task['created'],

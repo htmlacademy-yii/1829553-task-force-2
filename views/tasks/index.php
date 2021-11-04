@@ -26,7 +26,7 @@ $this->title = 'Новые задания';
             <p class="task-text"><?= Html::encode($item['description'])?></p>
             <div class="footer-task">
                 <p class="info-text town-text"><?= Html::encode($item['city_name'])?></p>
-                <p class="info-text category-text"><?= Html::encode($item['category_name'])?></p>
+                <p class="info-text category-text"><?= Html::encode($item['category_human_name'])?></p>
                 <a href="<?=Url::to('task/' . $item['task_id'], true)?>" class="button button--black">
                     Смотреть Задание
                 </a>
@@ -86,7 +86,7 @@ $this->title = 'Новые задания';
                             'id' => Html::encode($category->icon),
                         ]) ?>
                         <label class="control-label" for="<?=Html::encode($category->icon)?>">
-                            <?=Html::encode($category->name)?>
+                            <?=Html::encode($category->human_name)?>
                         </label>
                     </div>
                     <?php endforeach; ?>

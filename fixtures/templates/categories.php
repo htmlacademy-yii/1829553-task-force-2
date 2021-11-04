@@ -8,6 +8,6 @@
 $category = $faker->category($index);
 
 return [
-    'name' => $category['name'],
+    'human_name' => $category['human_name'],
     'icon' => $category['icon'],
 ];
