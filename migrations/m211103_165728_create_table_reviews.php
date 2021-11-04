@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160150_create_table_reviews extends Migration
+class m211103_165728_create_table_reviews extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -25,7 +25,7 @@ class m211031_160150_create_table_reviews extends Migration
             $tableOptions
         );
 
-        $this->createIndex('reviews_UN', '{{%reviews}}', ['client_id', 'performer_id', 'task_id'], true);
+        $this->createIndex('reviews_UN', '{{%reviews}}', ['task_id'], true);
 
         $this->addForeignKey(
             'reviews_FK',
@@ -56,7 +56,7 @@ class m211031_160150_create_table_reviews extends Migration
         );
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%reviews}}');
     }

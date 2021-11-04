@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160146_create_table_performers_categories extends Migration
+class m211103_165724_create_table_performers_categories extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -43,7 +43,7 @@ class m211031_160146_create_table_performers_categories extends Migration
         );
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%performers_categories}}');
     }

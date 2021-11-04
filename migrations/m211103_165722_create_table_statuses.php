@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160144_create_table_statuses extends Migration
+class m211103_165722_create_table_statuses extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -24,7 +24,7 @@ class m211031_160144_create_table_statuses extends Migration
         $this->createIndex('statuses_UN', '{{%statuses}}', ['system_name'], true);
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%statuses}}');
     }

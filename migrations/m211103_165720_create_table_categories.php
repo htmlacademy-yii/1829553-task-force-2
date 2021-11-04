@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160142_create_table_categories extends Migration
+class m211103_165720_create_table_categories extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -24,7 +24,7 @@ class m211031_160142_create_table_categories extends Migration
         $this->createIndex('categories_UN', '{{%categories}}', ['name'], true);
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%categories}}');
     }

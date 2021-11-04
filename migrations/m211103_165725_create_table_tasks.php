@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160147_create_table_tasks extends Migration
+class m211103_165725_create_table_tasks extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -16,7 +16,7 @@ class m211031_160147_create_table_tasks extends Migration
             [
                 'id' => $this->primaryKey()->unsigned(),
                 'title' => $this->string()->notNull(),
-                'description' => $this->text(),
+                'description' => $this->text()->notNull(),
                 'city_id' => $this->integer()->unsigned(),
                 'price' => $this->integer()->unsigned(),
                 'category_id' => $this->integer()->unsigned()->notNull(),
@@ -79,7 +79,7 @@ class m211031_160147_create_table_tasks extends Migration
         );
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%tasks}}');
     }

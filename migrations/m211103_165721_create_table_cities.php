@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160143_create_table_cities extends Migration
+class m211103_165721_create_table_cities extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -25,7 +25,7 @@ class m211031_160143_create_table_cities extends Migration
         $this->createIndex('cities_UN', '{{%cities}}', ['name', 'lat', 'long'], true);
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%cities}}');
     }

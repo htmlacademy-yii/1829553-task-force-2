@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160145_create_table_users extends Migration
+class m211103_165723_create_table_users extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -20,13 +20,14 @@ class m211031_160145_create_table_users extends Migration
                 'password' => $this->string(64)->notNull(),
                 'birthday' => $this->dateTime()->notNull(),
                 'is_client' => $this->boolean()->notNull(),
-                'about' => $this->text()->notNull(),
-                'phone' => $this->string(11)->notNull(),
-                'telegram' => $this->string(64)->notNull(),
+                'about' => $this->text(),
+                'phone' => $this->string(11),
+                'telegram' => $this->string(64),
                 'avatar' => $this->string(),
-                'hide_contacts' => $this->boolean()->notNull(),
+                'hide_contacts' => $this->boolean(),
                 'city_id' => $this->integer()->unsigned()->notNull(),
                 'created' => $this->dateTime()->notNull(),
+                'rating' => $this->float(),
             ],
             $tableOptions
         );
@@ -44,7 +45,7 @@ class m211031_160145_create_table_users extends Migration
         );
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%users}}');
     }

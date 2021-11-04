@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160149_create_table_files extends Migration
+class m211103_165726_create_table_bids extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -12,42 +12,43 @@ class m211031_160149_create_table_files extends Migration
         }
 
         $this->createTable(
-            '{{%files}}',
+            '{{%bids}}',
             [
                 'id' => $this->primaryKey()->unsigned(),
-                'name' => $this->string()->notNull(),
-                'path' => $this->string()->notNull(),
-                'client_id' => $this->integer()->unsigned()->notNull(),
+                'description' => $this->text()->notNull(),
+                'price' => $this->integer()->unsigned()->notNull(),
                 'task_id' => $this->integer()->unsigned()->notNull(),
+                'is_refused' => $this->boolean()->notNull(),
+                'performer_id' => $this->integer()->unsigned()->notNull(),
                 'created' => $this->dateTime()->notNull(),
             ],
             $tableOptions
         );
 
-        $this->createIndex('files_UN', '{{%files}}', ['name', 'path'], true);
+        $this->createIndex('bids_UN', '{{%bids}}', ['task_id', 'performer_id'], true);
 
         $this->addForeignKey(
-            'files_FK',
-            '{{%files}}',
-            ['client_id'],
-            '{{%users}}',
-            ['id'],
-            'NO ACTION',
-            'NO ACTION'
-        );
-        $this->addForeignKey(
-            'files_FK_1',
-            '{{%files}}',
+            'bids_FK',
+            '{{%bids}}',
             ['task_id'],
             '{{%tasks}}',
             ['id'],
             'NO ACTION',
             'NO ACTION'
         );
+        $this->addForeignKey(
+            'bids_FK_1',
+            '{{%bids}}',
+            ['performer_id'],
+            '{{%users}}',
+            ['id'],
+            'NO ACTION',
+            'NO ACTION'
+        );
     }
 
-    public function safeDown()
+    public function down()
     {
-        $this->dropTable('{{%files}}');
+        $this->dropTable('{{%bids}}');
     }
 }

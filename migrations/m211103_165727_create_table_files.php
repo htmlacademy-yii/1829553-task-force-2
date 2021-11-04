@@ -2,9 +2,9 @@
 
 use yii\db\Migration;
 
-class m211031_160148_create_table_bids extends Migration
+class m211103_165727_create_table_files extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -12,41 +12,42 @@ class m211031_160148_create_table_bids extends Migration
         }
 
         $this->createTable(
-            '{{%bids}}',
+            '{{%files}}',
             [
                 'id' => $this->primaryKey()->unsigned(),
-                'description' => $this->text()->notNull(),
-                'price' => $this->integer()->unsigned()->notNull(),
+                'name' => $this->string()->notNull(),
+                'path' => $this->string()->notNull(),
+                'client_id' => $this->integer()->unsigned()->notNull(),
                 'task_id' => $this->integer()->unsigned()->notNull(),
-                'is_refused' => $this->boolean()->notNull(),
-                'performer_id' => $this->integer()->unsigned()->notNull(),
                 'created' => $this->dateTime()->notNull(),
             ],
             $tableOptions
         );
 
+        $this->createIndex('files_UN', '{{%files}}', ['name', 'path'], true);
+
         $this->addForeignKey(
-            'bids_FK',
-            '{{%bids}}',
+            'files_FK',
+            '{{%files}}',
+            ['client_id'],
+            '{{%users}}',
+            ['id'],
+            'NO ACTION',
+            'NO ACTION'
+        );
+        $this->addForeignKey(
+            'files_FK_1',
+            '{{%files}}',
             ['task_id'],
             '{{%tasks}}',
             ['id'],
             'NO ACTION',
             'NO ACTION'
         );
-        $this->addForeignKey(
-            'bids_FK_1',
-            '{{%bids}}',
-            ['performer_id'],
-            '{{%users}}',
-            ['id'],
-            'NO ACTION',
-            'NO ACTION'
-        );
     }
 
-    public function safeDown()
+    public function down()
     {
-        $this->dropTable('{{%bids}}');
+        $this->dropTable('{{%files}}');
     }
 }
