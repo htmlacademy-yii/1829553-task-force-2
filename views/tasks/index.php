@@ -4,15 +4,19 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 $this->title = 'Новые задания';
 
-/* @var $data array */
+/* @var $listTasks array */
+/* @var $categories array */
+/* @var $taskSearchForm array */
+/* @var $listPeriods array */
 
 ?>
 <div class="left-column">
     <h3><?= Html::encode($this->title)?></h3>
-    <?php foreach ($data as $key => $item) : ?>
+    <?php foreach ($listTasks as $key => $item) : ?>
         <div class="task-card">
             <div class="header-task">
                 <a  href="#" class="link link--block link--big"><?= Html::encode($item['title'])?></a>
@@ -52,34 +56,57 @@ $this->title = 'Новые задания';
 <div class="right-column">
     <div class="right-card black">
         <div class="search-form">
-            <form>
-                <h4 class="head-card">Категории</h4>
-                <div class="form-group">
-                    <div>
-                        <input type="checkbox" id="сourier-services" checked>
-                        <label class="control-label" for="сourier-services">Курьерские услуги</label>
-                        <input id="cargo-transportation" type="checkbox">
-                        <label class="control-label" for="cargo-transportation">Грузоперевозки</label>
-                        <input id="translations" type="checkbox">
-                        <label class="control-label" for="translations">Переводы</label>
+            <?php $form = ActiveForm::begin([
+                'id' => 'searched-new-tasks',
+                'method' => 'get',
+                'options' => [
+                    'name' => 'test',
+                ],
+                'action' => [
+                    '/tasks',
+                ],
+                'fieldConfig' => [
+                    'options' => [
+                        'tag' => false,
+                    ],
+                ],
+            ]); ?>
+            <h4 class="head-card">Категории</h4>
+            <div class="form-group">
+                <div>
+                    <?php foreach ($categories as $id => $category) : ?>
+                    <div class="category">
+                        <?= $form->field($taskSearchForm, 'filterCategories[]', [
+                            'template' => '{input}',
+                        ])->checkbox([
+                            'label' => false,
+                            'value' => Html::encode($category->id),
+                            'uncheck' => null,
+                            'checked' => in_array($category->id, $taskSearchForm->filterCategories),
+                            'id' => Html::encode($category->icon),
+                        ]) ?>
+                        <label class="control-label" for="<?=Html::encode($category->icon)?>">
+                            <?=Html::encode($category->name)?>
+                        </label>
                     </div>
+                    <?php endforeach; ?>
                 </div>
-                <h4 class="head-card">Дополнительно</h4>
-                <div class="form-group">
-                    <input id="without-performer" type="checkbox" checked>
-                    <label class="control-label" for="without-performer">Без исполнителя</label>
-                </div>
-                <h4 class="head-card">Период</h4>
-                <div class="form-group">
-                    <label for="period-value"></label>
-                    <select id="period-value">
-                        <option>1 час</option>
-                        <option>12 часов</option>
-                        <option>24 часа</option>
-                    </select>
-                </div>
-                <input type="button" class="button button--blue" value="Искать">
-            </form>
+            </div>
+            <h4 class="head-card">Период</h4>
+            <div class="form-group">
+                <label for="period-value"></label>
+                <?= $form->field($taskSearchForm, 'period', [
+                    'template' => '{input}',
+                ])->dropDownList(
+                    $listPeriods,
+                    [
+                        'id' => 'period-value',
+                        'class' => null,
+                    ]
+                ) ?>
+            </div>
+            <?= Html::submitButton('Искать', ['class' => 'button button--blue']) ?>
+            <?php $form = ActiveForm::end(); ?>
         </div>
     </div>
 </div>

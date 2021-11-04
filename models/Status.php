@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "statuses".
@@ -61,5 +62,40 @@ class Status extends \yii\db\ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(Task::className(), ['status_id' => 'id']);
+    }
+
+    public static function getStatusId(string $systemName): int
+    {
+        $status = self::findOne(['system_name' => $systemName]);
+        if (is_null($status)) {
+            // @todo нужно ли сделать Exception для этого случая
+            throw new Exception('Status does not exist for system_name "' . $systemName . '"');
+        }
+        return $status['id'];
+    }
+
+    public static function getStatusNewId(): int
+    {
+        return static::getStatusId(self::STATUS_NEW);
+    }
+
+    public static function getStatusCanceledId(): int
+    {
+        return static::getStatusId(self::STATUS_CANCELED);
+    }
+
+    public static function getStatusInProcessId(): int
+    {
+        return static::getStatusId(self::STATUS_IN_PROCESS);
+    }
+
+    public static function getStatusCompletedId(): int
+    {
+        return static::getStatusId(self::STATUS_COMPLETED);
+    }
+
+    public static function getStatusFailedId(): int
+    {
+        return static::getStatusId(self::STATUS_FAILED);
     }
 }

@@ -187,13 +187,9 @@ class Task extends \yii\db\ActiveRecord
 
     public static function getTasks(string $statusName): array
     {
-        $status = Status::findOne(['system_name' => $statusName]);
-        if (is_null($status)) {
-            // @todo нужно ли сделать Exception для этого случая
-            throw new Exception('Status does not exist for system_name "' . $statusName . '"');
-        }
+        $statusId = Status::getStatusId($statusName);
         return Task::find()
-            ->where(['status_id' => $status['id']])
+            ->where(['status_id' => $statusId])
             ->orderBy(['created' => SORT_DESC])
             ->all();
     }

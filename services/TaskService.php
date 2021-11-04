@@ -5,6 +5,7 @@ namespace app\services;
 use app\models\Category;
 use app\models\City;
 use DateTime;
+use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 
@@ -12,18 +13,17 @@ class TaskService
 {
     /* @var $tasks array of Task */
     private array $tasks;
+    /* @var $categories array of Category */
+    private array $categories;
 
-    public function __construct(array $tasks)
+    public function __construct(array $tasks, array $categories)
     {
         $this->tasks = $tasks;
+        $this->categories = $categories;
     }
 
-    public function prepareIndex(): array
+    public function getListTasks(): array
     {
-        $categoryIds = array_map(function ($task) {
-            return $task['category_id'];
-        }, $this->tasks);
-        $skills = ArrayHelper::index(Category::findAll(array_unique($categoryIds)), 'id');
         $cityIds = array_map(function ($task) {
             return $task['city_id'];
         }, $this->tasks);
@@ -36,7 +36,7 @@ class TaskService
                 'title' => $task['title'],
                 'description' => $task['description'],
                 'price' => $task->getPriceHuman(),
-                'category_name' => $skills[$task['category_id']]->name,
+                'category_name' => $this->categories[$task['category_id']]->name,
                 'city_name' => $cities[$task['city_id']]->name,
                 'relative_time' => $this->convertTimeToRelativeTime($task['created']),
                 'created' => $task['created'],
@@ -47,9 +47,7 @@ class TaskService
 
     private function convertTimeToRelativeTime(string $created): string
     {
-        $currentDate = new DateTime();
-        $createdDate = new DateTime($created);
-        $interval = $currentDate->diff($createdDate);
+        $interval = DateTimeHelper::diff(new DateTime($created));
         if ($year = $interval->format('%y')) {
             return StringHelper::getPluralNoun($year, 'год', 'года', 'лет');
         }
@@ -68,5 +66,17 @@ class TaskService
         return 'только что';
     }
 
+    public function getListPeriods(): array
+    {
+        return [
+            '0' => 'Любой',
+            '1 hour' => '1 час',
+            '12 hours' => '12 часов',
+            '24 hours' => '24 часа',
+            '1 week' => '1 неделя',
+            '2 weeks' => '2 недели',
+            '3 weeks' => '3 недели',
+        ];
+    }
 
 }

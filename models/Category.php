@@ -81,4 +81,8 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasMany(PerformerCategories::className(), ['category_id' => 'id']);
     }
+
+//    написать миграцию для замены столбцов
+//    переделай фикстуры тоже, проблема со временем в задачах
+
 }
