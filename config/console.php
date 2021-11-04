@@ -60,7 +60,9 @@ if (YII_ENV_DEV) {
                 'app\fixtures\providers\Status',
                 'app\fixtures\providers\Category',
             ],
-
+        ],
+        'migration' => [
+            'class' => 'bizley\migration\controllers\MigrationController',
         ],
     ];
 }
