@@ -2,42 +2,33 @@
 
 namespace app\services;
 
-use app\models\Category;
-use app\models\City;
 use DateTime;
+use Exception;
 use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\StringHelper;
-use yii\helpers\ArrayHelper;
 
 class TaskService
 {
     /* @var $tasks array of Task */
     private array $tasks;
-    /* @var $categories array of Category */
-    private array $categories;
 
-    public function __construct(array $tasks, array $categories)
+    public function __construct(array $tasks)
     {
         $this->tasks = $tasks;
-        $this->categories = $categories;
     }
 
-    public function getListTasks(): array
+    public function getListTasks($categoryService, $cityService): array
     {
-        $cityIds = array_map(function ($task) {
-            return $task['city_id'];
-        }, $this->tasks);
-        $cities = ArrayHelper::index(City::findAll(array_unique($cityIds)), 'id');
-
         $result = [];
+
         foreach ($this->tasks as $task) {
             $result[$task['id']] = [
                 'task_id' => $task['id'],
                 'title' => $task['title'],
                 'description' => $task['description'],
-                'price' => $task->getPriceHuman(),
-                'category_human_name' => $this->categories[$task['category_id']]->human_name,
-                'city_name' => $cities[$task['city_id']]->name,
+                'price' => $this->getPriceHuman($task['id']),
+                'category_human_name' => $categoryService->getHumanName($task['category_id']),
+                'city_name' => $cityService->getHumanName($task['city_id']),
                 'relative_time' => $this->convertTimeToRelativeTime($task['created']),
                 'created' => $task['created'],
             ];
@@ -77,6 +68,18 @@ class TaskService
             '2 weeks' => '2 недели',
             '3 weeks' => '3 недели',
         ];
+    }
+
+    public function getPriceHuman(int $taskId): string
+    {
+        $sign = '₽';
+        if (empty($this->tasks[$taskId])) {
+            throw new Exception('Такой задачи не существует в списках');
+        }
+        if (empty($this->tasks[$taskId]->price)) {
+            return 'Договорная';
+        }
+        return $this->tasks[$taskId]->price . ' ' . $sign;
     }
 
 }

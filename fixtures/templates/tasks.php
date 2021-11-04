@@ -55,7 +55,7 @@ if ($faker->boolean(80)) {
 }
 
 $price = null;
-if ($faker->boolean(20)) {
+if ($faker->boolean(80)) {
     $price = random_int(100, 9999);
 }
 
@@ -63,7 +63,7 @@ $data = $faker->getTaskData();
 $title = $data['name'];
 $description = $data['description'];
 
-$created = $faker->dateTimeBetween('-1 months', '-1 week')
+$created = $faker->dateTimeBetween('-1 months', '-1 hour')
     ->format('Y-m-d H:i:s');
 
 return [

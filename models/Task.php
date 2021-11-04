@@ -191,16 +191,10 @@ class Task extends \yii\db\ActiveRecord
         return Task::find()
             ->where(['status_id' => $statusId])
             ->orderBy(['created' => SORT_DESC])
+            ->indexBy('id')
             ->all();
     }
 
-    public function getPriceHuman(): string
-    {
-        $sign = '₽';
-        if (empty($this->price)) {
-            return 'Договорная';
-        }
-        return $this->price . ' ' . $sign;
-    }
+
 
 }

@@ -11,7 +11,6 @@ class TaskSearchForm extends Task
 
     public function filterTasks(array $queryParams): array
     {
-
         $query = Task::find()->where(['status_id' => Status::getStatusNewId()]);
         if (!empty($queryParams['filterCategories'])) {
             $query->andWhere(['category_id' => $queryParams['filterCategories']]);
@@ -22,6 +21,6 @@ class TaskSearchForm extends Task
             $dateTime = new DateTime('-' . $queryParams['period']);
             $query->andWhere(['>', 'created', $dateTime->format('Y-m-d H:i:s')]);
         }
-        return $query->all();
+        return $query->indexBy('id')->all();
     }
 }
