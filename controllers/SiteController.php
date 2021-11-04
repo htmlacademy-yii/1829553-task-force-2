@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\City;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,6 +62,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        $city = City::findOne(1);
+        var_dump($city);
         return $this->render('index');
     }
 

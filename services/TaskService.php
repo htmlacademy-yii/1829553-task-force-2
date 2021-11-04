@@ -2,9 +2,10 @@
 
 namespace app\services;
 
+use app\models\Category;
 use app\models\City;
-use app\models\Skill;
 use DateTime;
+use Mar4hk0\Helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 
 class TaskService
@@ -17,57 +18,54 @@ class TaskService
         $this->tasks = $tasks;
     }
 
-    public function index(): array
+    public function prepareIndex(): array
     {
-        $skillIds = array_map(function ($task) {
-            return $task['id_skill'];
+        $categoryIds = array_map(function ($task) {
+            return $task['category_id'];
         }, $this->tasks);
-        $skills = ArrayHelper::index(Skill::findAll(array_unique($skillIds)), 'id');
+        $skills = ArrayHelper::index(Category::findAll(array_unique($categoryIds)), 'id');
         $cityIds = array_map(function ($task) {
-            return $task['id_city'];
+            return $task['city_id'];
         }, $this->tasks);
         $cities = ArrayHelper::index(City::findAll(array_unique($cityIds)), 'id');
 
         $result = [];
         foreach ($this->tasks as $task) {
             $result[$task['id']] = [
-                'id' => $task['id'],
-                'name' => $task['name'],
+                'task_id' => $task['id'],
+                'title' => $task['title'],
                 'description' => $task['description'],
-                'price' => $task['price'],
-                'skill_name' => $skills[$task['id_skill']]->name,
-                'skill_icon' => $skills[$task['id_skill']]->icon,
-                'city_name' => $cities[$task['id_city']]->name,
-                'countdown_time' => $this->convertTimeToCountdownTime($task['created']),
+                'price' => $task->getPriceHuman(),
+                'category_name' => $skills[$task['category_id']]->name,
+                'city_name' => $cities[$task['city_id']]->name,
+                'relative_time' => $this->convertTimeToRelativeTime($task['created']),
                 'created' => $task['created'],
             ];
         }
         return $result;
     }
 
-    private function convertTimeToCountdownTime(string $created): string
+    private function convertTimeToRelativeTime(string $created): string
     {
-        $current = new DateTime();
-        $r = new DateTime($created);
-        $interval = $current->diff($r);
-        // @TODO Adds plural
+        $currentDate = new DateTime();
+        $createdDate = new DateTime($created);
+        $interval = $currentDate->diff($createdDate);
         if ($year = $interval->format('%y')) {
-            return $year . ' год назад';
+            return StringHelper::getPluralNoun($year, 'год', 'года', 'лет');
         }
         if ($month = $interval->format('%m')) {
-            return $month . ' месяц назад';
+            return StringHelper::getPluralNoun($month, 'месяц', 'месяца', 'месяцев');
         }
         if ($day = $interval->format('%d')) {
-            return $day . ' день назад';
+            return StringHelper::getPluralNoun($day, 'день', 'дня', 'дней');
         }
         if ($hour = $interval->format('%h')) {
-            return $hour . ' часов назад';
+            return StringHelper::getPluralNoun($hour, 'час', 'часа', 'часов');
         }
         if ($minute = $interval->format('%i')) {
-            return $minute . ' минуту назад';
+            return StringHelper::getPluralNoun($minute, 'минута', 'минуты', 'минут');
         }
         return 'только что';
-
     }
 
 

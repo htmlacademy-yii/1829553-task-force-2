@@ -3,103 +3,83 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
-use yii\helpers\StringHelper;
+use yii\helpers\Url;
 
 $this->title = 'Новые задания';
 
-/* @var $tasks array from function TaskService::index() */
+/* @var $data array */
 
 ?>
-<section class="new-task">
-    <div class="new-task__wrapper">
-        <h1><?= Html::encode($this->title) ?></h1>
-        <?php foreach ($tasks as $key => $task) : ?>
-            <div class="new-task__card">
-                <div class="new-task__title">
-                    <a href="view.html" class="link-regular">
-                        <h2><?= Html::encode($task['name']) ?></h2>
-                    </a>
-                    <a class="new-task__type link-regular" href="#">
-                        <p><?=Html::encode($task['skill_name'])?></p>
-                    </a>
-                </div>
-                <div class="new-task__icon new-task__icon--<?=Html::encode($task['skill_icon'])?>"></div>
-                <p class="new-task_description">
-                    <?=Html::encode(StringHelper::truncateWords($task['description'], 15))?>
-                </p>
-                <b class="new-task__price new-task__price--<?=Html::encode($task['skill_icon'])?>">
-                    <?= Html::encode($task['price']) ?>
-                <b> ₽</b></b>
-                <p class="new-task__place"><?= Html::encode($task['skill_icon']) ?></p>
-                <span class="new-task__time"><?= Html::encode($task['countdown_time']) ?></span>
+<div class="left-column">
+    <h3><?= Html::encode($this->title)?></h3>
+    <?php foreach ($data as $key => $item) : ?>
+        <div class="task-card">
+            <div class="header-task">
+                <a  href="#" class="link link--block link--big"><?= Html::encode($item['title'])?></a>
+                <p class="price price--task"><?= Html::encode($item['price'])?></p>
             </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="new-task__pagination">
-        <ul class="new-task__pagination-list">
-            <li class="pagination__item"><a href="#"></a></li>
-            <li class="pagination__item pagination__item--current">
-                <a>1</a></li>
-            <li class="pagination__item"><a href="#">2</a></li>
-            <li class="pagination__item"><a href="#">3</a></li>
-            <li class="pagination__item"><a href="#"></a></li>
+            <p class="info-text"><span class="current-time"><?= Html::encode($item['relative_time'])?></span> назад</p>
+            <p class="task-text"><?= Html::encode($item['description'])?></p>
+            <div class="footer-task">
+                <p class="info-text town-text"><?= Html::encode($item['city_name'])?></p>
+                <p class="info-text category-text"><?= Html::encode($item['category_name'])?></p>
+                <a href="<?=Url::to('task/' . $item['task_id'], true)?>" class="button button--black">
+                    Смотреть Задание
+                </a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <div class="pagination-wrapper">
+        <ul class="pagination-list">
+            <li class="pagination-item mark">
+                <a href="#" class="link link--page"></a>
+            </li>
+            <li class="pagination-item">
+                <a href="#" class="link link--page">1</a>
+            </li>
+            <li class="pagination-item pagination-item--active">
+                <a href="#" class="link link--page">2</a>
+            </li>
+            <li class="pagination-item">
+                <a href="#" class="link link--page">3</a>
+            </li>
+            <li class="pagination-item mark">
+                <a href="#" class="link link--page"></a>
+            </li>
         </ul>
     </div>
-</section>
-<section class="search-task">
-    <div class="search-task__wrapper">
-        <form class="search-task__form" name="test" method="post" action="#">
-            <fieldset class="search-task__categories">
-                <legend>Категории</legend>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                    <span>Курьерские услуги</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                    <span>Грузоперевозки</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                    <span>Переводы</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                    <span>Строительство и ремонт</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                    <span>Выгул животных</span>
-                </label>
-            </fieldset>
-            <fieldset class="search-task__categories">
-                <legend>Дополнительно</legend>
-                <div>
-                    <label class="checkbox__legend">
-                        <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                        <span>Без исполнителя</span>
-                    </label>
+</div>
+<div class="right-column">
+    <div class="right-card black">
+        <div class="search-form">
+            <form>
+                <h4 class="head-card">Категории</h4>
+                <div class="form-group">
+                    <div>
+                        <input type="checkbox" id="сourier-services" checked>
+                        <label class="control-label" for="сourier-services">Курьерские услуги</label>
+                        <input id="cargo-transportation" type="checkbox">
+                        <label class="control-label" for="cargo-transportation">Грузоперевозки</label>
+                        <input id="translations" type="checkbox">
+                        <label class="control-label" for="translations">Переводы</label>
+                    </div>
                 </div>
-                <div>
-                    <label class="checkbox__legend">
-                        <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>
-                        <span>Удаленная работа</span>
-                    </label>
+                <h4 class="head-card">Дополнительно</h4>
+                <div class="form-group">
+                    <input id="without-performer" type="checkbox" checked>
+                    <label class="control-label" for="without-performer">Без исполнителя</label>
                 </div>
-            </fieldset>
-            <div class="field-container">
-                <label class="search-task__name" for="8">Период</label>
-                <select class="multiple-select input" id="8" size="1" name="time[]">
-                    <option value="day">За день</option>
-                    <option selected value="week">За неделю</option>
-                    <option value="month">За месяц</option>
-                </select>
-            </div>
-            <div class="field-container">
-                <label class="search-task__name" for="9">Поиск по названию</label>
-                <input class="input-middle input" id="9" type="search" name="q" placeholder="">
-            </div>
-            <button class="button" type="submit">Искать</button>
-        </form>
+                <h4 class="head-card">Период</h4>
+                <div class="form-group">
+                    <label for="period-value"></label>
+                    <select id="period-value">
+                        <option>1 час</option>
+                        <option>12 часов</option>
+                        <option>24 часа</option>
+                    </select>
+                </div>
+                <input type="button" class="button button--blue" value="Искать">
+            </form>
+        </div>
     </div>
-</section>
+</div>

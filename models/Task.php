@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "tasks".
@@ -183,4 +184,27 @@ class Task extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Status::className(), ['id' => 'status_id']);
     }
+
+    public static function getTasks(string $statusName): array
+    {
+        $status = Status::findOne(['system_name' => $statusName]);
+        if (is_null($status)) {
+            // @todo нужно ли сделать Exception для этого случая
+            throw new Exception('Status does not exist for system_name "' . $statusName . '"');
+        }
+        return Task::find()
+            ->where(['status_id' => $status['id']])
+            ->orderBy(['created' => SORT_DESC])
+            ->all();
+    }
+
+    public function getPriceHuman(): string
+    {
+        $sign = '₽';
+        if (empty($this->price)) {
+            return 'Договорная';
+        }
+        return $this->price . ' ' . $sign;
+    }
+
 }
