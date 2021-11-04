@@ -16,6 +16,11 @@ $performerId = $performerIds[$index % count($performerIds)];
 
 $taskFixture = new TaskFixture();
 $tasks = $taskFixture->getTasks(Status::STATUS_NEW);
+$num = count($tasks) * 0.3;
+for ($i = $num; $i > 0; --$i) {
+    $key = array_key_last($tasks);
+    unset($tasks[$key]);
+}
 $task = $tasks[$index % count($tasks)];
 
 $minPrice = $task['price'] - round($task['price'] * 0.3);
