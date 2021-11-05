@@ -9,8 +9,7 @@ use app\fixtures\UserFixture;
 use app\models\City;
 use app\models\Category;
 use app\models\Status;
-use app\models\Task;
-
+use app\fixtures\Helper;
 
 $userFixture = new UserFixture();
 $clientId = $userFixture->getRandomClientId();
@@ -63,7 +62,7 @@ $data = $faker->getTaskData();
 $title = $data['name'];
 $description = $data['description'];
 
-$created = $faker->dateTimeBetween('-1 months', '-1 hour')
+$created = $faker->dateTimeBetween(Helper::getMaxLastDate(), '-1 hour')
     ->format('Y-m-d H:i:s');
 
 return [

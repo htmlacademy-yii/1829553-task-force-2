@@ -14,4 +14,9 @@ class Helper
         return $diff->format('%R%a days');
     }
 
+
+    public static function getMaxLastDate(): string
+    {
+        return '-2 weeks';
+    }
 }

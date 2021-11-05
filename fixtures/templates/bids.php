@@ -7,8 +7,8 @@
 
 use app\fixtures\UserFixture;
 use app\fixtures\TaskFixture;
-use \app\models\Status;
-use \app\fixtures\Helper;
+use app\models\Status;
+use app\fixtures\Helper;
 
 $userFixture = new UserFixture();
 $performerIds = $userFixture->getAllPerformerId();
@@ -26,7 +26,7 @@ $task = $tasks[$index % count($tasks)];
 $minPrice = $task['price'] - round($task['price'] * 0.3);
 $endDate = Helper::convertToRelativeTime($task['created']);
 
-$created = $faker->dateTimeBetween('-1 month', $endDate)
+$created = $faker->dateTimeBetween(Helper::getMaxLastDate(), $endDate)
     ->format('Y-m-d H:i:s');
 
 return [
