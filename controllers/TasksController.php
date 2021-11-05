@@ -29,8 +29,8 @@ class TasksController extends Controller
         $categories = Category::find()->indexBy('id')->indexBy('id')->all();
         $categoryService = new CategoryService($categories);
 
-        $cityIds = array_map(function ($task) {
-            return $task['city_id'];
+        $cityIds = array_map(function (Task $task) {
+            return $task->city_id;
         }, $newTasks);
         $cities = City::find($cityIds)->indexBy('id')->all();
         $cityService = new CityService($cities);
