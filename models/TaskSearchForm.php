@@ -34,7 +34,6 @@ class TaskSearchForm extends Task
             $this->remoteJob = true;
             $query->andWhere(['tasks.city_id' => null]);
         }
-        var_dump($query->createCommand()->getRawSql());
         return $query->indexBy('id')->all();
     }
 }
