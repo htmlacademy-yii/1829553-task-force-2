@@ -14,15 +14,15 @@ class TaskSearchForm extends Task
     public function filterTasks(array $queryParams): array
     {
         // @TODO нужно делать отдельный модель или тут можно это сделать?
-        $query = Task::find()->where(['status_id' => Status::getStatusNewId()]);
+        $query = Task::find()->where(['tasks.status_id' => Status::getStatusNewId()]);
         if (!empty($queryParams['filterCategories'])) {
-            $query->andWhere(['category_id' => $queryParams['filterCategories']]);
+            $query->andWhere(['tasks.category_id' => $queryParams['filterCategories']]);
             $this->filterCategories = $queryParams['filterCategories'];
         }
         if (!empty($queryParams['period'])) {
             $this->period = $queryParams['period'];
             $dateTime = new DateTime('-' . $queryParams['period']);
-            $query->andWhere(['>', 'created', $dateTime->format('Y-m-d H:i:s')]);
+            $query->andWhere(['>', 'tasks.created', $dateTime->format('Y-m-d H:i:s')]);
         }
         if (!empty($queryParams['notBids'])) {
             $this->notBids = true;
@@ -32,8 +32,9 @@ class TaskSearchForm extends Task
         }
         if (!empty($queryParams['remoteJob'])) {
             $this->remoteJob = true;
-            $query->andWhere(['city_id' => null]);
+            $query->andWhere(['tasks.city_id' => null]);
         }
+        var_dump($query->createCommand()->getRawSql());
         return $query->indexBy('id')->all();
     }
 }
