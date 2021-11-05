@@ -22,15 +22,15 @@ class TaskService
         $result = [];
 
         foreach ($this->tasks as $task) {
-            $result[$task['id']] = [
-                'task_id' => $task['id'],
-                'title' => $task['title'],
-                'description' => $task['description'],
-                'price' => $this->getPriceHuman($task['id']),
-                'category_human_name' => $categoryService->getHumanName($task['category_id']),
-                'city_name' => $cityService->getHumanName($task['city_id']),
-                'relative_time' => $this->convertTimeToRelativeTime($task['created']),
-                'created' => $task['created'],
+            $result[$task->id] = [
+                'task_id' => $task->id,
+                'title' => $task->title,
+                'description' => $task->description,
+                'price' => $this->getPriceHuman($task->id),
+                'category_human_name' => $categoryService->getHumanName($task->category_id),
+                'city_name' => $cityService->getHumanName($task->city_id),
+                'relative_time' => $this->convertTimeToRelativeTime($task->created),
+                'created' => $task->created,
             ];
         }
         return $result;
