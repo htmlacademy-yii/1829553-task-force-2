@@ -92,6 +92,33 @@ $this->title = 'Новые задания';
                     <?php endforeach; ?>
                 </div>
             </div>
+            <h4 class="head-card">Дополнительно</h4>
+            <div class="form-group">
+                <div class="extra">
+                    <?= $form->field($taskSearchForm, 'notBids', [
+                        'template' => '{input}',
+                    ])->checkbox([
+                        'label' => false,
+                        'value' => Html::encode('notBids'),
+                        'uncheck' => null,
+                        'checked' => $taskSearchForm->notBids,
+                        'id' => 'without-bid',
+                    ]) ?>
+                    <label class="control-label" for="without-bid">Без откликов</label>
+                </div>
+                <div class="extra">
+                    <?= $form->field($taskSearchForm, 'remoteJob', [
+                        'template' => '{input}',
+                    ])->checkbox([
+                        'label' => false,
+                        'value' => Html::encode('remoteJob'),
+                        'uncheck' => null,
+                        'checked' => $taskSearchForm->remoteJob,
+                        'id' => 'remote-job',
+                    ]) ?>
+                    <label class="control-label" for="remote-job">Удаленная работа</label>
+                </div>
+            </div>
             <h4 class="head-card">Период</h4>
             <div class="form-group">
                 <label for="period-value"></label>

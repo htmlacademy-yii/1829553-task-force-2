@@ -8,9 +8,12 @@ class TaskSearchForm extends Task
 {
     public array $filterCategories = [];
     public string $period = '';
+    public bool $remoteJob = false;
+    public bool $notBids = false;
 
     public function filterTasks(array $queryParams): array
     {
+        // @TODO нужно делать отдельный модель или тут можно это сделать?
         $query = Task::find()->where(['status_id' => Status::getStatusNewId()]);
         if (!empty($queryParams['filterCategories'])) {
             $query->andWhere(['category_id' => $queryParams['filterCategories']]);
@@ -20,6 +23,16 @@ class TaskSearchForm extends Task
             $this->period = $queryParams['period'];
             $dateTime = new DateTime('-' . $queryParams['period']);
             $query->andWhere(['>', 'created', $dateTime->format('Y-m-d H:i:s')]);
+        }
+        if (!empty($queryParams['notBids'])) {
+            $this->notBids = true;
+            $query->select(['tasks.*']);
+            $query->joinWith('bids');
+            $query->andWhere(['bids.id' => null]);
+        }
+        if (!empty($queryParams['remoteJob'])) {
+            $this->remoteJob = true;
+            $query->andWhere(['city_id' => null]);
         }
         return $query->indexBy('id')->all();
     }
