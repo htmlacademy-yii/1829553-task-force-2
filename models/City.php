@@ -5,11 +5,12 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "city".
+ * This is the model class for table "cities".
  *
  * @property int $id
  * @property string $name
- * @property string $created
+ * @property string|null $lat
+ * @property string|null $long
  *
  * @property Task[] $tasks
  * @property User[] $users
@@ -21,7 +22,7 @@ class City extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'city';
+        return 'cities';
     }
 
     /**
@@ -31,8 +32,9 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['created'], 'safe'],
             [['name'], 'string', 'max' => 255],
+            [['lat', 'long'], 'string', 'max' => 100],
+            [['name', 'lat', 'long'], 'unique', 'targetAttribute' => ['name', 'lat', 'long']],
         ];
     }
 
@@ -43,8 +45,9 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название',
-            'created' => 'Создан',
+            'name' => 'Name',
+            'lat' => 'Lat',
+            'long' => 'Long',
         ];
     }
 
@@ -55,7 +58,7 @@ class City extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Task::className(), ['id_city' => 'id']);
+        return $this->hasMany(Task::className(), ['city_id' => 'id']);
     }
 
     /**
@@ -65,6 +68,6 @@ class City extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['id_city' => 'id']);
+        return $this->hasMany(User::className(), ['city_id' => 'id']);
     }
 }

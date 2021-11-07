@@ -3,103 +3,137 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
-use yii\helpers\StringHelper;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 $this->title = 'Новые задания';
 
-/* @var $tasks array from function TaskService::index() */
+/* @var $listTasks array */
+/* @var $categories array */
+/* @var $taskSearchForm array */
+/* @var $listPeriods array */
 
 ?>
-<section class="new-task">
-    <div class="new-task__wrapper">
-        <h1><?= Html::encode($this->title) ?></h1>
-        <?php foreach ($tasks as $key => $task) : ?>
-            <div class="new-task__card">
-                <div class="new-task__title">
-                    <a href="view.html" class="link-regular">
-                        <h2><?= Html::encode($task['name']) ?></h2>
-                    </a>
-                    <a class="new-task__type link-regular" href="#">
-                        <p><?=Html::encode($task['skill_name'])?></p>
-                    </a>
-                </div>
-                <div class="new-task__icon new-task__icon--<?=Html::encode($task['skill_icon'])?>"></div>
-                <p class="new-task_description">
-                    <?=Html::encode(StringHelper::truncateWords($task['description'], 15))?>
-                </p>
-                <b class="new-task__price new-task__price--<?=Html::encode($task['skill_icon'])?>">
-                    <?= Html::encode($task['price']) ?>
-                <b> ₽</b></b>
-                <p class="new-task__place"><?= Html::encode($task['skill_icon']) ?></p>
-                <span class="new-task__time"><?= Html::encode($task['countdown_time']) ?></span>
+<div class="left-column">
+    <h3><?= Html::encode($this->title)?></h3>
+    <?php foreach ($listTasks as $key => $item) : ?>
+        <div class="task-card">
+            <div class="header-task">
+                <a  href="#" class="link link--block link--big"><?= Html::encode($item['title'])?></a>
+                <p class="price price--task"><?= Html::encode($item['price'])?></p>
             </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="new-task__pagination">
-        <ul class="new-task__pagination-list">
-            <li class="pagination__item"><a href="#"></a></li>
-            <li class="pagination__item pagination__item--current">
-                <a>1</a></li>
-            <li class="pagination__item"><a href="#">2</a></li>
-            <li class="pagination__item"><a href="#">3</a></li>
-            <li class="pagination__item"><a href="#"></a></li>
+            <p class="info-text"><span class="current-time"><?= Html::encode($item['relative_time'])?></span> назад</p>
+            <p class="task-text"><?= Html::encode($item['description'])?></p>
+            <div class="footer-task">
+                <p class="info-text town-text"><?= Html::encode($item['city_name'])?></p>
+                <p class="info-text category-text"><?= Html::encode($item['category_human_name'])?></p>
+                <a href="<?=Url::to('task/' . $item['task_id'], true)?>" class="button button--black">
+                    Смотреть Задание
+                </a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <div class="pagination-wrapper">
+        <ul class="pagination-list">
+            <li class="pagination-item mark">
+                <a href="#" class="link link--page"></a>
+            </li>
+            <li class="pagination-item">
+                <a href="#" class="link link--page">1</a>
+            </li>
+            <li class="pagination-item pagination-item--active">
+                <a href="#" class="link link--page">2</a>
+            </li>
+            <li class="pagination-item">
+                <a href="#" class="link link--page">3</a>
+            </li>
+            <li class="pagination-item mark">
+                <a href="#" class="link link--page"></a>
+            </li>
         </ul>
     </div>
-</section>
-<section class="search-task">
-    <div class="search-task__wrapper">
-        <form class="search-task__form" name="test" method="post" action="#">
-            <fieldset class="search-task__categories">
-                <legend>Категории</legend>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                    <span>Курьерские услуги</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                    <span>Грузоперевозки</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                    <span>Переводы</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                    <span>Строительство и ремонт</span>
-                </label>
-                <label class="checkbox__legend">
-                    <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                    <span>Выгул животных</span>
-                </label>
-            </fieldset>
-            <fieldset class="search-task__categories">
-                <legend>Дополнительно</legend>
+</div>
+<div class="right-column">
+    <div class="right-card black">
+        <div class="search-form">
+            <?php $form = ActiveForm::begin([
+                'id' => 'searched-new-tasks',
+                'method' => 'get',
+                'options' => [
+                    'name' => 'test',
+                ],
+                'action' => [
+                    '/tasks',
+                ],
+                'fieldConfig' => [
+                    'options' => [
+                        'tag' => false,
+                    ],
+                ],
+            ]); ?>
+            <h4 class="head-card">Категории</h4>
+            <div class="form-group">
                 <div>
-                    <label class="checkbox__legend">
-                        <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                        <span>Без исполнителя</span>
-                    </label>
+                    <?php foreach ($categories as $id => $category) : ?>
+                    <div class="category">
+                        <?= $form->field($taskSearchForm, 'filterCategories[]', [
+                            'template' => '{input}',
+                        ])->checkbox([
+                            'label' => false,
+                            'value' => Html::encode($category->id),
+                            'uncheck' => null,
+                            'checked' => in_array($category->id, $taskSearchForm->filterCategories),
+                            'id' => Html::encode($category->system_name),
+                        ]) ?>
+                        <label class="control-label" for="<?=Html::encode($category->system_name)?>">
+                            <?=Html::encode($category->human_name)?>
+                        </label>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <div>
-                    <label class="checkbox__legend">
-                        <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>
-                        <span>Удаленная работа</span>
-                    </label>
+            </div>
+            <h4 class="head-card">Дополнительно</h4>
+            <div class="form-group">
+                <div class="extra">
+                    <?= $form->field($taskSearchForm, 'notBids', [
+                        'template' => '{input}',
+                    ])->checkbox([
+                        'label' => false,
+                        'value' => Html::encode('notBids'),
+                        'uncheck' => null,
+                        'checked' => $taskSearchForm->notBids,
+                        'id' => 'without-bid',
+                    ]) ?>
+                    <label class="control-label" for="without-bid">Без откликов</label>
                 </div>
-            </fieldset>
-            <div class="field-container">
-                <label class="search-task__name" for="8">Период</label>
-                <select class="multiple-select input" id="8" size="1" name="time[]">
-                    <option value="day">За день</option>
-                    <option selected value="week">За неделю</option>
-                    <option value="month">За месяц</option>
-                </select>
+                <div class="extra">
+                    <?= $form->field($taskSearchForm, 'remoteJob', [
+                        'template' => '{input}',
+                    ])->checkbox([
+                        'label' => false,
+                        'value' => Html::encode('remoteJob'),
+                        'uncheck' => null,
+                        'checked' => $taskSearchForm->remoteJob,
+                        'id' => 'remote-job',
+                    ]) ?>
+                    <label class="control-label" for="remote-job">Удаленная работа</label>
+                </div>
             </div>
-            <div class="field-container">
-                <label class="search-task__name" for="9">Поиск по названию</label>
-                <input class="input-middle input" id="9" type="search" name="q" placeholder="">
+            <h4 class="head-card">Период</h4>
+            <div class="form-group">
+                <label for="period-value"></label>
+                <?= $form->field($taskSearchForm, 'period', [
+                    'template' => '{input}',
+                ])->dropDownList(
+                    $listPeriods,
+                    [
+                        'id' => 'period-value',
+                        'class' => null,
+                    ]
+                ) ?>
             </div>
-            <button class="button" type="submit">Искать</button>
-        </form>
+            <?= Html::submitButton('Искать', ['class' => 'button button--blue']) ?>
+            <?php $form = ActiveForm::end(); ?>
+        </div>
     </div>
-</section>
+</div>

@@ -9,40 +9,29 @@ class UserFixture extends ActiveFixture
 {
     public $modelClass = 'app\models\User';
 
-    public function getAllSpecialistId(): array
+    public function getAllPerformerId(): array
     {
-        $roleFixture = new RoleFixture();
-        $specialistRoleID = $roleFixture
-            ->getRoleIDByName($roleFixture->getRoleNameSpecialist());
         return User::find()
             ->select('id')
-            ->where(['id_role' => $specialistRoleID])
+            ->where(['is_client' => !User::CLIENT])
             ->column();
     }
 
-    public function getRandomSpecialistId(): int
+    public function getRandomPerformerId(): int
     {
-        $roleFixture = new RoleFixture();
-        $specialistRoleID = $roleFixture
-            ->getRoleIDByName($roleFixture->getRoleNameSpecialist());
-
-        return $this->getRandomUserId($specialistRoleID);
+        return $this->getRandomUserId(false);
     }
 
-    public function getRandomCustomerId(): int
+    public function getRandomClientId(): int
     {
-        $roleFixture = new RoleFixture();
-        $customerRoleID = $roleFixture
-            ->getRoleIDByName($roleFixture->getRoleNameCustomer());
-
-        return $this->getRandomUserId($customerRoleID);
+        return $this->getRandomUserId(true);
     }
 
-    private function getRandomUserId(int $idRole): int
+    private function getRandomUserId(bool $is_client): int
     {
         $userIds = User::find()
             ->select('id')
-            ->where(['id_role' => $idRole])
+            ->where(['is_client' => $is_client])
             ->column();
 
         return $this->getRandomItemFromArray($userIds);

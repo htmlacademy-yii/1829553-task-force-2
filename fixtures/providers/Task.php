@@ -138,9 +138,11 @@ class Task extends Base
 
     ];
 
-    public function getTaskData()
+    public function getTaskData(): array
     {
         $key = array_rand(static::$data);
         return static::$data[$key];
     }
+
+
 }

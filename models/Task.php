@@ -3,58 +3,43 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
- * This is the model class for table "task".
+ * This is the model class for table "tasks".
  *
  * @property int $id
- * @property int|null $id_specialist
- * @property int $id_customer
- * @property string $name
- * @property string $description
+ * @property string $title
+ * @property string|null $description
+ * @property int|null $city_id
  * @property int|null $price
- * @property int|null $deadline UTC Fortmat
- * @property int $remote
- * @property int $id_skill
- * @property int|null $id_city
- * @property float|null $longitude
- * @property float|null $latitude
+ * @property int $category_id
+ * @property int $client_id
+ * @property int|null $performer_id
+ * @property string|null $deadline
  * @property string|null $address
+ * @property string|null $long
+ * @property string|null $lat
+ * @property int $status_id
  * @property string $created
  *
- * @property Chat[] $chats
+ * @property Bid[] $bids
+ * @property Category $category
  * @property City $city
- * @property User $customer
+ * @property Client $client
  * @property File[] $files
- * @property Respond[] $responds
- * @property Review $review
- * @property Skill $skill
- * @property User $specialist
- * @property User[] $respondedSpecialists
- * @property TaskFile[] $taskFiles
+ * @property Performer $performer
+ * @property Review[] $reviews
+ * @property Status $status
  */
 class Task extends \yii\db\ActiveRecord
 {
-    public const NEW = 'new';
-    public const CANCELED = 'canceled';
-    public const IN_PROGRESS = 'in_progress';
-    public const COMPLETED = 'completed';
-    public const FAILED = 'failed';
-
-    public const STATUSES = [
-        self::NEW,
-        self::CANCELED,
-        self::IN_PROGRESS,
-        self::COMPLETED,
-        self::FAILED
-    ];
-
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'task';
+        return 'tasks';
     }
 
     /**
@@ -63,40 +48,37 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_specialist', 'id_customer', 'price', 'deadline', 'remote', 'id_skill', 'id_city'], 'integer'],
-            [['id_customer', 'name', 'description', 'remote', 'id_skill', 'created'], 'required'],
-            [['description', 'address', 'status'], 'string'],
-            [['longitude', 'latitude'], 'number'],
-            [['created'], 'safe'],
-            [['name'], 'string', 'max' => 255],
-            [
-                ['id_specialist'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => User::className(),
-                'targetAttribute' => ['id_specialist' => 'id']
-            ],
-            [
-                ['id_customer'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => User::className(),
-                'targetAttribute' => ['id_customer' => 'id']
-            ],
-            [
-                ['id_skill'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => Skill::className(),
-                'targetAttribute' => ['id_skill' => 'id']
-            ],
-            [
-                ['id_city'],
+            [['title', 'category_id', 'client_id', 'status_id', 'created'], 'required'],
+            [['description'], 'string'],
+            [['city_id', 'price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
+            [['deadline', 'created'], 'safe'],
+            [['title', 'address'], 'string', 'max' => 255],
+            [['long', 'lat'], 'string', 'max' => 100],
+            [['city_id'],
                 'exist',
                 'skipOnError' => true,
                 'targetClass' => City::className(),
-                'targetAttribute' => ['id_city' => 'id']
-            ],
+                'targetAttribute' => ['city_id' => 'id']],
+            [['category_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Category::className(),
+                'targetAttribute' => ['category_id' => 'id']],
+            [['client_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['client_id' => 'id']],
+            [['performer_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['performer_id' => 'id']],
+            [['status_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Status::className(),
+                'targetAttribute' => ['status_id' => 'id']],
         ];
     }
 
@@ -107,31 +89,40 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_specialist' => 'ID специалиста',
-            'id_customer' => 'ID Заказчика',
-            'name' => 'Название',
-            'description' => 'Описание',
-            'price' => 'Цена',
-            'deadline' => 'Сроки',
-            'remote' => 'Удаленная работа',
-            'id_skill' => 'ID Навыка',
-            'id_city' => 'ID Города',
-            'longitude' => 'Долгота',
-            'latitude' => 'Широта',
-            'address' => 'Адрес',
-            'created' => 'Создан',
-            'status' => 'Статус',
+            'title' => 'Название',
+            'description' => 'Description',
+            'city_id' => 'City ID',
+            'price' => 'Price',
+            'category_id' => 'Category ID',
+            'client_id' => 'Client ID',
+            'performer_id' => 'Performer ID',
+            'deadline' => 'Deadline',
+            'address' => 'Address',
+            'long' => 'Long',
+            'lat' => 'Lat',
+            'status_id' => 'Status ID',
+            'created' => 'Created',
         ];
     }
 
     /**
-     * Gets query for [[Chats]].
+     * Gets query for [[Bids]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getChats()
+    public function getBids()
     {
-        return $this->hasMany(Chat::className(), ['id_task' => 'id']);
+        return $this->hasMany(Bid::className(), ['task_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Category]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**
@@ -141,27 +132,17 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'id_city']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
-     * Gets query for [[Customer]].
+     * Gets query for [[Client]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCustomer()
+    public function getClient()
     {
-        return $this->hasOne(User::className(), ['id' => 'id_customer']);
-    }
-
-    /**
-     * Gets query for [[Specialist]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSpecialist()
-    {
-        return $this->hasOne(User::className(), ['id' => 'id_specialist']);
+        return $this->hasOne(Client::className(), ['id' => 'client_id']);
     }
 
     /**
@@ -171,66 +152,49 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getFiles()
     {
-        return $this->hasMany(File::className(), ['id' => 'id_file'])
-            ->viaTable('task_file', ['id_task' => 'id']);
+        return $this->hasMany(File::className(), ['task_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Responds]].
+     * Gets query for [[Performer]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getResponds()
+    public function getPerformer()
     {
-        return $this->hasMany(Respond::className(), ['id_task' => 'id']);
+        return $this->hasOne(Performer::className(), ['id' => 'performer_id']);
     }
 
     /**
-     * Gets query for [[Review]].
+     * Gets query for [[Reviews]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getReview()
+    public function getReviews()
     {
-        return $this->hasOne(Review::className(), ['id_task' => 'id']);
+        return $this->hasMany(Review::className(), ['task_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Skill]].
+     * Gets query for [[Status]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSkill()
+    public function getStatus()
     {
-        return $this->hasOne(Skill::className(), ['id' => 'id_skill']);
+        return $this->hasOne(Status::className(), ['id' => 'status_id']);
     }
 
-    /**
-     * Gets query for [[Specialists]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRespondedSpecialists()
+    public static function getTasks(string $statusName): array
     {
-        return $this->hasMany(User::className(), ['id' => 'id_specialist'])
-            ->viaTable('respond', ['id_task' => 'id']);
+        $statusId = Status::getStatusId($statusName);
+        return Task::find()
+            ->where(['status_id' => $statusId])
+            ->orderBy(['created' => SORT_DESC])
+            ->indexBy('id')
+            ->all();
     }
 
-    /**
-     * Gets query for [[TaskFiles]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaskFiles()
-    {
-        return $this->hasMany(TaskFile::className(), ['id_task' => 'id']);
-    }
 
-    /**
-     * Returns tasks by given status.
-     */
-    public static function getTasksByStatus(?string $status = null, int $sort = SORT_DESC): array
-    {
-        return Task::find(['status' => $status])->orderBy(['created' => $sort])->all();
-    }
+
 }

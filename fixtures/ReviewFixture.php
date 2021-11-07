@@ -9,5 +9,6 @@ class ReviewFixture extends ActiveFixture
     public $modelClass = 'app\models\Review';
     public $depends = [
         'app\fixtures\TaskFixture',
+        'app\fixtures\StatusFixture',
     ];
 }

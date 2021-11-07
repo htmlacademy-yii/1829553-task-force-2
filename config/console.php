@@ -54,10 +54,15 @@ if (YII_ENV_DEV) {
             'providers' => [
                 'app\fixtures\providers\User',
                 'app\fixtures\providers\Task',
-                'app\fixtures\providers\Respond',
+                'app\fixtures\providers\Bid',
                 'app\fixtures\providers\Review',
+                'app\fixtures\providers\City',
+                'app\fixtures\providers\Status',
+                'app\fixtures\providers\Category',
             ],
-
+        ],
+        'migration' => [
+            'class' => 'bizley\migration\controllers\MigrationController',
         ],
     ];
 }

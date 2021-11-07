@@ -2,10 +2,10 @@
 
 namespace app\services;
 
-use app\models\City;
-use app\models\Skill;
 use DateTime;
-use yii\helpers\ArrayHelper;
+use Exception;
+use Mar4hk0\Helpers\DateTimeHelper;
+use Mar4hk0\Helpers\StringHelper;
 
 class TaskService
 {
@@ -17,58 +17,69 @@ class TaskService
         $this->tasks = $tasks;
     }
 
-    public function index(): array
+    public function getListTasks($categoryService, $cityService): array
     {
-        $skillIds = array_map(function ($task) {
-            return $task['id_skill'];
-        }, $this->tasks);
-        $skills = ArrayHelper::index(Skill::findAll(array_unique($skillIds)), 'id');
-        $cityIds = array_map(function ($task) {
-            return $task['id_city'];
-        }, $this->tasks);
-        $cities = ArrayHelper::index(City::findAll(array_unique($cityIds)), 'id');
-
         $result = [];
+
         foreach ($this->tasks as $task) {
-            $result[$task['id']] = [
-                'id' => $task['id'],
-                'name' => $task['name'],
-                'description' => $task['description'],
-                'price' => $task['price'],
-                'skill_name' => $skills[$task['id_skill']]->name,
-                'skill_icon' => $skills[$task['id_skill']]->icon,
-                'city_name' => $cities[$task['id_city']]->name,
-                'countdown_time' => $this->convertTimeToCountdownTime($task['created']),
-                'created' => $task['created'],
+            $result[$task->id] = [
+                'task_id' => $task->id,
+                'title' => $task->title,
+                'description' => $task->description,
+                'price' => $this->getPriceHuman($task->id),
+                'category_human_name' => $categoryService->getHumanName($task->category_id),
+                'city_name' => $cityService->getHumanName($task->city_id),
+                'relative_time' => $this->convertTimeToRelativeTime($task->created),
+                'created' => $task->created,
             ];
         }
         return $result;
     }
 
-    private function convertTimeToCountdownTime(string $created): string
+    private function convertTimeToRelativeTime(string $created): string
     {
-        $current = new DateTime();
-        $r = new DateTime($created);
-        $interval = $current->diff($r);
-        // @TODO Adds plural
+        $interval = DateTimeHelper::diff(new DateTime($created));
         if ($year = $interval->format('%y')) {
-            return $year . ' год назад';
+            return StringHelper::getPluralNoun($year, 'год', 'года', 'лет');
         }
         if ($month = $interval->format('%m')) {
-            return $month . ' месяц назад';
+            return StringHelper::getPluralNoun($month, 'месяц', 'месяца', 'месяцев');
         }
         if ($day = $interval->format('%d')) {
-            return $day . ' день назад';
+            return StringHelper::getPluralNoun($day, 'день', 'дня', 'дней');
         }
         if ($hour = $interval->format('%h')) {
-            return $hour . ' часов назад';
+            return StringHelper::getPluralNoun($hour, 'час', 'часа', 'часов');
         }
         if ($minute = $interval->format('%i')) {
-            return $minute . ' минуту назад';
+            return StringHelper::getPluralNoun($minute, 'минута', 'минуты', 'минут');
         }
         return 'только что';
-
     }
 
+    public function getListPeriods(): array
+    {
+        return [
+            '0' => 'Любой',
+            '1 hour' => '1 час',
+            '12 hours' => '12 часов',
+            '24 hours' => '24 часа',
+            '1 week' => '1 неделя',
+            '2 weeks' => '2 недели',
+            '3 weeks' => '3 недели',
+        ];
+    }
+
+    public function getPriceHuman(int $taskId): string
+    {
+        $sign = '₽';
+        if (empty($this->tasks[$taskId])) {
+            throw new Exception('Такой задачи не существует в списках');
+        }
+        if (empty($this->tasks[$taskId]->price)) {
+            return 'Договорная';
+        }
+        return $this->tasks[$taskId]->price . ' ' . $sign;
+    }
 
 }

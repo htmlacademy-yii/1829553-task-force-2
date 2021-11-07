@@ -2,47 +2,44 @@
 
 namespace app\models;
 
+use cebe\markdown\tests\MarkdownOLStartNumTest;
 use Yii;
 
 /**
- * This is the model class for table "user".
+ * This is the model class for table "users".
  *
  * @property int $id
- * @property string $name
  * @property string $email
- * @property string $birthday
+ * @property string $name
  * @property string $password
+ * @property string $birthday
+ * @property int $is_client
  * @property string|null $about
- * @property int|null $hide_profile
- * @property int|null $hide_contacts
- * @property int $id_role
- * @property int|null $id_city
- * @property float|null $rating
  * @property string|null $phone
- * @property string|null $skype
  * @property string|null $telegram
+ * @property string|null $avatar
+ * @property int|null $hide_contacts
+ * @property int $city_id
  * @property string $created
+ * @property float|null $rating
  *
- * @property Chat[] $customerChats
- * @property Chat[] $SpecialistChats
  * @property City $city
  * @property File[] $files
- * @property Notification $notification
- * @property Respond[] $responds
- * @property Role $role
- * @property Skill[] $skills
- * @property Task[] $customerTasks
- * @property Task[] $specialistTasks
- * @property UserSkill[] $userSkills
+ * @property string $USER [char(32)]
+ * @property int $CURRENT_CONNECTIONS [bigint]
+ * @property int $TOTAL_CONNECTIONS [bigint]
  */
 class User extends \yii\db\ActiveRecord
 {
+
+    public const CLIENT = true;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'user';
+        return 'users';
     }
 
     /**
@@ -51,30 +48,20 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'email', 'birthday', 'password', 'id_role'], 'required'],
+            [['email', 'name', 'password', 'birthday', 'is_client', 'city_id', 'created'], 'required'],
             [['birthday', 'created'], 'safe'],
+            [['is_client', 'hide_contacts', 'city_id'], 'integer'],
             [['about'], 'string'],
-            [['hide_profile', 'hide_contacts', 'id_role', 'id_city'], 'integer'],
             [['rating'], 'number'],
-            [['name', 'email'], 'string', 'max' => 100],
-            [['password', 'skype'], 'string', 'max' => 255],
-            [['phone'], 'string', 'max' => 12],
-            [['telegram'], 'string', 'max' => 64],
+            [['email', 'name', 'avatar'], 'string', 'max' => 255],
+            [['password', 'telegram'], 'string', 'max' => 64],
+            [['phone'], 'string', 'max' => 11],
             [['email'], 'unique'],
-            [
-                ['id_role'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => Role::className(),
-                'targetAttribute' => ['id_role' => 'id']
-            ],
-            [
-                ['id_city'],
+            [['city_id'],
                 'exist',
                 'skipOnError' => true,
                 'targetClass' => City::className(),
-                'targetAttribute' => ['id_city' => 'id']
-            ],
+                'targetAttribute' => ['city_id' => 'id']],
         ];
     }
 
@@ -85,41 +72,20 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'email' => 'Email',
             'name' => 'Имя',
-            'email' => 'e-mail',
-            'birthday' => 'День рождения',
             'password' => 'Пароль',
-            'about' => 'О себе',
-            'hide_profile' => 'Скрыть профиль',
-            'hide_contacts' => 'Скрыть контакты',
-            'id_role' => 'ID Роли',
-            'id_city' => 'ID Города',
-            'rating' => 'Рейтинг',
+            'birthday' => 'День рождения',
+            'is_client' => 'Является клиентом',
+            'about' => 'Информация о себе',
             'phone' => 'Номер телефона',
-            'skype' => 'Skype-nick',
-            'telegram' => 'Telegram-nick',
-            'created' => 'Создан',
+            'telegram' => 'Telegram',
+            'avatar' => 'Аватар',
+            'hide_contacts' => 'Скрыть контакты?',
+            'city_id' => 'City ID',
+            'created' => 'Created',
+            'rating' => 'Rating',
         ];
-    }
-
-    /**
-     * Gets query for [[CustomerChats]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCustomerChats()
-    {
-        return $this->hasMany(Chat::className(), ['id_customer' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SpecialistChats]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSpecialistChats()
-    {
-        return $this->hasMany(Chat::className(), ['id_specialist' => 'id']);
     }
 
     /**
@@ -129,7 +95,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'id_city']);
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
     /**
@@ -139,77 +105,6 @@ class User extends \yii\db\ActiveRecord
      */
     public function getFiles()
     {
-        return $this->hasMany(File::className(), ['id_user' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Notification]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getNotification()
-    {
-        return $this->hasOne(Notification::className(), ['id_user' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Responds]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getResponds()
-    {
-        return $this->hasMany(Respond::className(), ['id_specialist' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Role]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRole()
-    {
-        return $this->hasOne(Role::className(), ['id' => 'id_role']);
-    }
-
-    /**
-     * Gets query for [[Skills]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSkills()
-    {
-        return $this->hasMany(Skill::className(), ['id' => 'id_skill'])
-            ->viaTable('user_skill', ['id_specialist' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SpecialistTasks]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSpecialistTasks()
-    {
-        return $this->hasMany(Task::className(), ['id_specialist' => 'id']);
-    }
-
-    /**
-     * Gets query for [[CustomerTasks]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCustomerTasks()
-    {
-        return $this->hasMany(Task::className(), ['id_customer' => 'id']);
-    }
-
-    /**
-     * Gets query for [[UserSkills]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserSkills()
-    {
-        return $this->hasMany(UserSkill::className(), ['id_specialist' => 'id']);
+        return $this->hasMany(File::className(), ['user_id' => 'id']);
     }
 }

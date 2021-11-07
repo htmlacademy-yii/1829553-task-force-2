@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\City;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -9,7 +10,6 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use Mar4hk0\models\CancelAction;
 
 class SiteController extends Controller
 {
@@ -62,6 +62,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        $city = City::findOne(1);
+        var_dump($city);
         return $this->render('index');
     }
 
