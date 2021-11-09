@@ -1,12 +1,11 @@
 <?php
 
-/* @var $this yii\web\View */
-
 use app\models\Task;
 use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\Price;
 use yii\helpers\Html;
 
+/* @var $this yii\web\View */
 /* @var $task Task */
 ?>
 <div class="left-column">
