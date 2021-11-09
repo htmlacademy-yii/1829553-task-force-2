@@ -15,6 +15,44 @@ namespace app\models;
 class Performer extends User
 {
     /**
+     * @var false
+     */
+    private bool $status;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['email', 'name', 'password', 'birthday', 'is_client', 'city_id', 'created'], 'required'],
+            [['birthday', 'created', 'status'], 'safe'],
+            [['is_client', 'hide_contacts', 'city_id'], 'integer'],
+            [['about'], 'string'],
+            [['rating'], 'number'],
+            [['email', 'name', 'avatar'], 'string', 'max' => 255],
+            [['password', 'telegram'], 'string', 'max' => 64],
+            [['phone'], 'string', 'max' => 11],
+            [['email'], 'unique'],
+            [['city_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => City::className(),
+                'targetAttribute' => ['city_id' => 'id']],
+        ];
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        $this->status = false;
+        if ($this->getTasks()->where(['status_id' => Status::STATUS_IN_PROCESS])->all()) {
+            $this->status = true;
+        }
+    }
+
+    /**
      * Gets query for [[Bids]].
      *
      * @return \yii\db\ActiveQuery
@@ -83,5 +121,40 @@ class Performer extends User
             }
         }
         return $result;
+    }
+
+    public function getNumberTaskCompleted()
+    {
+        return $this->getNumberTask(Status::STATUS_COMPLETED);
+    }
+
+    public function getNumberTaskFailed()
+    {
+        return $this->getNumberTask(Status::STATUS_FAILED);
+    }
+
+    public function getNumberTask(string $status)
+    {
+        return $this->getTasks()->where(['status_id' => $status])->count();
+    }
+
+    public function getPlaceRating(): int
+    {
+        $performers = User::find()->where(['is_client' => 0])->orderBy(['rating' => SORT_DESC])->all();
+        foreach ($performers as $index => $performer) {
+            if ($performer->id == $this->id) {
+                return ++$index;
+            }
+        }
+        return count($performers);
+    }
+
+    public function getStatusHuman(): string
+    {
+        $msg = 'Открыт для новых заказов';
+        if ($this->status) {
+            $msg = 'Занят';
+        }
+        return $msg;
     }
 }
