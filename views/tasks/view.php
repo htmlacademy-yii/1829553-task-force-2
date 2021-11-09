@@ -4,15 +4,15 @@
 
 use app\models\Task;
 use Mar4hk0\Helpers\DateTimeHelper;
+use Mar4hk0\Helpers\Price;
 use yii\helpers\Html;
 
 /* @var $task Task */
-
 ?>
 <div class="left-column">
     <div class="head-wrapper">
         <h3 class="head-main"><?=HTML::encode($task->title);?></h3>
-        <p class="price price--big"><?=HTML::encode($task->getPriceHuman());?></p>
+        <p class="price price--big"><?=HTML::encode(Price::getPriceHuman($task->price));?></p>
     </div>
     <p class="task-description"><?=HTML::encode($task->description);?></p>
     <a href="#" class="button button--blue">Откликнуться на задание</a>
@@ -22,53 +22,47 @@ use yii\helpers\Html;
         <p class="map-address">Новый арбат, 23, к. 1</p>
     </div>
 
-    <?php var_dump($task->bids);?>
 
-    <h4 class="head-regular">Отклики на задание</h4>
-    <div class="response-card">
-        <img class="customer-photo" src="/img/man-glasses.png" width="146" height="156" alt="Фото заказчиков">
-        <div class="feedback-wrapper">
-            <a href="#" class="link link--block link--big">Астахов Павел</a>
-            <div class="response-wrapper">
-                <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                <p class="reviews">2 отзыва</p>
+    <?php if (!empty($task->bids)): ?>
+        <h4 class="head-regular">Отклики на задание</h4>
+        <?php foreach ($task->bids as $bid): ?>
+            <?php $performer = $bid->performer;?>
+            <div class="response-card">
+                <img class="customer-photo" src="<?=HTML::encode($performer->getPathAvatar());?>"
+                     width="146" height="156" alt="<?=HTML::encode($performer->name)?>">
+                <div class="feedback-wrapper">
+                    <a href="#" class="link link--block link--big"><?=HTML::encode($performer->name)?></a>
+                    <div class="response-wrapper">
+                        <div class="stars-rating small">
+                            <?php foreach($performer->getStarts() as $index => $isFill): ?>
+                                <?php if ($isFill): ?>
+                                    <span class="fill-star">&nbsp;</span>
+                                <?php else: ?>
+                                    <span>&nbsp;</span>
+                                <?php endif; ?>
+                            <?php endforeach;?>
+                        </div>
+                        <p class="reviews"><?=Html::encode($performer->getReviews()->count())?> отзыва</p>
+                    </div>
+                    <p class="response-message">
+                        <?=HTML::encode($bid->description)?>.
+                    </p>
+                </div>
+                <div class="feedback-wrapper">
+                    <p class="info-text">
+                        <span class="current-time">
+                            <?=Yii::$app->formatter->format($bid->created, 'relativetime');?>
+                        </span>
+                    </p>
+                    <p class="price price--small"><?=Html::encode(Price::getPriceHuman($bid->price))?></p>
+                </div>
+                <div class="button-popup">
+                    <a href="#" class="button button--blue button--small">Принять</a>
+                    <a href="#" class="button button--orange button--small">Отказать</a>
+                </div>
             </div>
-            <p class="response-message">
-                Могу сделать всё в лучшем виде. У меня есть необходимый опыт и инструменты.
-            </p>
-
-        </div>
-        <div class="feedback-wrapper">
-            <p class="info-text"><span class="current-time">25 минут </span>назад</p>
-            <p class="price price--small">3700 ₽</p>
-        </div>
-        <div class="button-popup">
-            <a href="#" class="button button--blue button--small">Принять</a>
-            <a href="#" class="button button--orange button--small">Отказать</a>
-        </div>
-    </div>
-    <div class="response-card">
-        <img class="customer-photo" src="/img/man-sweater.png" width="146" height="156" alt="Фото заказчиков">
-        <div class="feedback-wrapper">
-            <a href="#" class="link link--block link--big">Дмитриев Андрей</a>
-            <div class="response-wrapper">
-                <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                <p class="reviews">8 отзывов</p>
-            </div>
-            <p class="response-message">
-                Примусь за выполнение задания в течение часа, сделаю быстро и качественно.
-            </p>
-
-        </div>
-        <div class="feedback-wrapper">
-            <p class="info-text"><span class="current-time">2 часа </span>назад</p>
-            <p class="price price--small">1999 ₽</p>
-        </div>
-        <div class="button-popup">
-            <a href="#" class="button button--blue button--small">Принять</a>
-            <a href="#" class="button button--orange button--small">Отказать</a>
-        </div>
-    </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
 <div class="right-column">
     <div class="right-card black info-card">

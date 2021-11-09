@@ -3,6 +3,7 @@
 namespace app\services;
 
 use Mar4hk0\Helpers\DateTimeHelper;
+use Mar4hk0\Helpers\Price;
 
 class TaskService
 {
@@ -43,7 +44,7 @@ class TaskService
                 'task_id' => $task->id,
                 'title' => $task->title,
                 'description' => $task->description,
-                'price' => $task->getPriceHuman(),
+                'price' => Price::getPriceHuman($task->price),
                 'category_human_name' => $this->categories[$task->category_id]->getHumanName(),
                 'city_name' => $cityName,
                 'relative_time' => DateTimeHelper::convertTimeToRelative($task->created),

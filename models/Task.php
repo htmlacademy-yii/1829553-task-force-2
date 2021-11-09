@@ -199,14 +199,7 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasOne(Status::className(), ['id' => 'status_id']);
     }
 
-    public function getPriceHuman(): string
-    {
-        $sign = '₽';
-        if (empty($this->price)) {
-            return 'Договорная';
-        }
-        return $this->price . ' ' . $sign;
-    }
+
 
     public function getRemoteJobHuman(): string
     {
