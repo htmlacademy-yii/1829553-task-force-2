@@ -3,6 +3,8 @@
 namespace app\models;
 
 use cebe\markdown\tests\MarkdownOLStartNumTest;
+use DateTime;
+use Mar4hk0\Helpers\DateTimeHelper;
 use Yii;
 
 /**
@@ -106,5 +108,10 @@ class User extends \yii\db\ActiveRecord
     public function getFiles()
     {
         return $this->hasMany(File::className(), ['user_id' => 'id']);
+    }
+
+    public function getCurrentAge(): int
+    {
+        return DateTimeHelper::diff(new DateTime($this->birthday))->y;
     }
 }
