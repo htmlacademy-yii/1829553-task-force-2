@@ -48,7 +48,8 @@ $config = [
         'showScriptName' => false,
         'enableStrictParsing' => false,
         'rules' => [
-            'tasks/view/<id>' => 'tasks/view'
+            'tasks/view/<id>' => 'tasks/view',
+            'user/view/<id>' => 'user/view',
         ],
     ],
     'formatter' => [
