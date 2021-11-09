@@ -540,7 +540,9 @@ template {
           justify-content: space-between;
   height: 59px;
   border-bottom: 1px solid #d6d6d6;
-  padding: 15px 12px; }
+  padding: 15px 12px;
+  min-height: 80px;
+}
 
 .main-nav {
   display: -webkit-box;

@@ -25,6 +25,9 @@ $this->title = 'Новые задания';
             <p class="info-text"><span class="current-time"><?= Html::encode($item['relative_time'])?></span> назад</p>
             <p class="task-text"><?= Html::encode($item['description'])?></p>
             <div class="footer-task">
+                <?php if (empty($item['city_name'])): ?>
+                    <?php $item['city_name'] = $item['remote_job'];?>
+                <?php endif; ?>
                 <p class="info-text town-text"><?= Html::encode($item['city_name'])?></p>
                 <p class="info-text category-text"><?= Html::encode($item['category_human_name'])?></p>
                 <a href="<?=Url::to('task/' . $item['task_id'], true)?>" class="button button--black">

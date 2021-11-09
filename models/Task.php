@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Exception;
+use yii\i18n\Formatter;
 
 /**
  * This is the model class for table "tasks".
@@ -34,6 +35,8 @@ use yii\base\Exception;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    public bool $remoteJob;
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +54,7 @@ class Task extends \yii\db\ActiveRecord
             [['title', 'category_id', 'client_id', 'status_id', 'created'], 'required'],
             [['description'], 'string'],
             [['city_id', 'price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
-            [['deadline', 'created'], 'safe'],
+            [['deadline', 'created', 'remoteJob'], 'safe'],
             [['title', 'address'], 'string', 'max' => 255],
             [['long', 'lat'], 'string', 'max' => 100],
             [['city_id'],
@@ -102,7 +105,18 @@ class Task extends \yii\db\ActiveRecord
             'lat' => 'Lat',
             'status_id' => 'Status ID',
             'created' => 'Created',
+            'remoteJob' => 'remoteJob',
         ];
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        $this->remoteJob = false;
+        if (empty($this->city_id) || (empty($this->lat) && empty($this->long))) {
+            $this->remoteJob = true;
+        }
     }
 
     /**
@@ -183,6 +197,32 @@ class Task extends \yii\db\ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(Status::className(), ['id' => 'status_id']);
+    }
+
+    public function getPriceHuman(): string
+    {
+        $sign = '₽';
+        if (empty($this->price)) {
+            return 'Договорная';
+        }
+        return $this->price . ' ' . $sign;
+    }
+
+    public function getRemoteJobHuman(): string
+    {
+        $result = 'Работа не удаленная';
+        if ($this->remoteJob) {
+            $result = 'Работа удаленная';
+        }
+        return $result;
+    }
+
+    public function getDeadlineHuman()
+    {
+        if (empty($this->deadline)) {
+            return 'Срок не определен';
+        }
+        return Yii::$app->formatter->format($this->deadline, ['datetime', 'php:j F, H:i']);
     }
 
     public static function getTasks(string $statusName): array

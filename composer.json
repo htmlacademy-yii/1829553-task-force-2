@@ -20,7 +20,8 @@
         "php": "^8.0",
         "symfony/yaml": "^5.2.1",
         "yiisoft/yii2-faker": "^2.0",
-        "bizley/migration": "^4.3"
+        "bizley/migration": "^4.3",
+        "lasserafn/php-initial-avatar-generator": "^4.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

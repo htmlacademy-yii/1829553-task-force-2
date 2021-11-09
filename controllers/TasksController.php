@@ -7,11 +7,10 @@ use app\models\City;
 use app\models\Task;
 use app\models\Status;
 use app\models\TaskSearchForm;
-use app\services\CategoryService;
-use app\services\CityService;
 use app\services\TaskService;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class TasksController extends Controller
 {
@@ -26,17 +25,17 @@ class TasksController extends Controller
         else {
             $newTasks = Task::getTasks(Status::STATUS_NEW);
         }
-        $categories = Category::find()->indexBy('id')->indexBy('id')->all();
-        $categoryService = new CategoryService($categories);
+        $categories = Category::find()->indexBy('id')->all();
 
         $cityIds = array_map(function (Task $task) {
             return $task->city_id;
         }, $newTasks);
-        $cities = City::find($cityIds)->indexBy('id')->all();
-        $cityService = new CityService($cities);
+        $cities = City::find()->where(['id' => $cityIds])->indexBy('id')->all();
 
         $taskService = new TaskService($newTasks);
-        $listTasks = $taskService->getListTasks($categoryService, $cityService);
+        $taskService->setCities($cities);
+        $taskService->setCategories($categories);
+        $listTasks = $taskService->getIndex();
         $listPeriods = $taskService->getListPeriods();
 
         return $this->render(
@@ -50,5 +49,19 @@ class TasksController extends Controller
         );
     }
 
+    public function actionView($id)
+    {
+        $task = Task::findOne([$id]);
+        if (empty($task)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render(
+            'view',
+            [
+                'task' => $task,
+            ]
+        );
+    }
 
 }
