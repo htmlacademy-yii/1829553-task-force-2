@@ -26,11 +26,20 @@ $user = [
 ];
 
 if (!$is_client) {
+    $avatar = new LasseRafn\InitialAvatarGenerator\InitialAvatar();
+    $image = $avatar->name($user['name'])
+        ->size(191)
+        ->background('#8BC34A')
+        ->color('#fff')
+        ->generate();
+    $fileName = Yii::$app->security->generateRandomString(7) . '.png';
+    $filePath = Yii::getAlias('@avatars') . '/' . $fileName;
+    $image->save($filePath);
     $user += [
         'about' => $faker->about(),
         'phone' => substr($faker->e164PhoneNumber, 1, 11),
         'telegram' => '@' . $faker->word,
-        'avatar' => $faker->word,
+        'avatar' => $fileName,
         'hide_contacts' => $faker->boolean(30),
         'rating' => number_format($faker->randomFloat(5, 0, 5), 2),
     ];
