@@ -4,6 +4,7 @@ use app\models\Task;
 use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\Price;
 use yii\helpers\Html;
+use Mar4hk0\Helpers\HTML as CustomHTML;
 
 /* @var $this yii\web\View */
 /* @var $task Task */
@@ -32,15 +33,7 @@ use yii\helpers\Html;
                 <div class="feedback-wrapper">
                     <a href="#" class="link link--block link--big"><?=HTML::encode($performer->name)?></a>
                     <div class="response-wrapper">
-                        <div class="stars-rating small">
-                            <?php foreach($performer->getStarts() as $index => $isFill): ?>
-                                <?php if ($isFill): ?>
-                                    <span class="fill-star">&nbsp;</span>
-                                <?php else: ?>
-                                    <span>&nbsp;</span>
-                                <?php endif; ?>
-                            <?php endforeach;?>
-                        </div>
+                        <?=CustomHTML::starts($performer->rating, 'big')?>
                         <p class="reviews"><?=Html::encode($performer->getReviews()->count())?> отзыва</p>
                     </div>
                     <p class="response-message">

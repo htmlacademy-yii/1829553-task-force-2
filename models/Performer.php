@@ -105,24 +105,6 @@ class Performer extends User
         return $this->hasMany(PerformerCategories::className(), ['performer_id' => 'id']);
     }
 
-    public function getPathAvatar()
-    {
-        return '/uploads/avatars/' . $this->avatar;
-    }
-
-    public function getStarts()
-    {
-        $result = [];
-        $rating = round($this->rating);
-        for ($i = 1; $i <= 5; $i++) {
-            $result[$i] = 0;
-            if ($i <= $rating) {
-                $result[$i] = 1;
-            }
-        }
-        return $result;
-    }
-
     public function getNumberTaskCompleted()
     {
         return $this->getNumberTask(Status::STATUS_COMPLETED);
