@@ -17,7 +17,7 @@ class Performer extends User
     /**
      * @var false
      */
-    private bool $status;
+    private bool $isBusy;
 
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ class Performer extends User
     {
         return [
             [['email', 'name', 'password', 'birthday', 'is_client', 'city_id', 'created'], 'required'],
-            [['birthday', 'created', 'status'], 'safe'],
+            [['birthday', 'created', 'isBusy'], 'safe'],
             [['is_client', 'hide_contacts', 'city_id'], 'integer'],
             [['about'], 'string'],
             [['rating'], 'number'],
@@ -46,9 +46,9 @@ class Performer extends User
     {
         parent::afterFind();
 
-        $this->status = false;
+        $this->isBusy = false;
         if ($this->getTasks()->where(['status_id' => Status::STATUS_IN_PROCESS])->all()) {
-            $this->status = true;
+            $this->isBusy = true;
         }
     }
 
@@ -152,7 +152,7 @@ class Performer extends User
     public function getStatusHuman(): string
     {
         $msg = 'Открыт для новых заказов';
-        if ($this->status) {
+        if ($this->isBusy) {
             $msg = 'Занят';
         }
         return $msg;
