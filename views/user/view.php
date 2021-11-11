@@ -1,9 +1,10 @@
 <?php
 
 use app\models\Performer;
-use Mar4hk0\Helpers\DateTimeHelper;
-use Mar4hk0\Helpers\Price;
+use yii\helpers\Url;
+use Mar4hk0\Helpers\HTML as CustomHTML;
 use yii\helpers\Html;
+
 
 /* @var $this yii\web\View */
 /* @var $performer Performer */
@@ -14,7 +15,7 @@ use yii\helpers\Html;
         <div class="photo-rate">
             <img class="card-photo" src="<?=Html::encode($performer->getPathAvatar())?>" width="191" height="190" alt="<?=Html::encode($performer->name)?>">
             <div class="card-rate">
-                <div class="stars-rating big"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
+                <?=CustomHTML::starts($performer->rating, 'big')?>
                 <span class="current-rate"><?=Html::encode($performer->rating)?></span>
             </div>
         </div>
@@ -42,31 +43,27 @@ use yii\helpers\Html;
             </p>
         </div>
     </div>
-    <h4 class="head-regular">Отзывы заказчиков</h4>
-    <div class="response-card">
-        <img class="customer-photo" src="img/man-coat.png" width="120" height="127" alt="Фото заказчиков">
-        <div class="feedback-wrapper">
-            <p class="feedback">«Кумар сделал всё в лучшем виде. Буду обращаться к нему в
-                будущем, если возникнет такая необходимость!»</p>
-            <p class="task">Задание «<a href="#" class="link link--small">Повесить полочку</a>» выполнено</p>
-        </div>
-        <div class="feedback-wrapper">
-            <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-            <p class="info-text"><span class="current-time">25 минут </span>назад</p>
-        </div>
-    </div>
-    <div class="response-card">
-        <img class="customer-photo" src="img/man-sweater.png" width="120" height="127" alt="Фото заказчиков">
-        <div class="feedback-wrapper">
-            <p class="feedback">«Кумар сделал всё в лучшем виде. Буду обращаться к нему в
-                будущем, если возникнет такая необходимость!»</p>
-            <p class="task">Задание «<a href="#" class="link link--small">Повесить полочку</a>» выполнено</p>
-        </div>
-        <div class="feedback-wrapper">
-            <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-            <p class="info-text"><span class="current-time">25 минут </span>назад</p>
-        </div>
-    </div>
+    <?php if (!empty($performer->reviews)): ?>
+        <h4 class="head-regular">Отзывы заказчиков</h4>
+        <?php foreach ($performer->reviews as $review): ?>
+            <?php
+                $client = $review->client;
+                $task = $review->task;
+            ?>
+            <div class="response-card">
+                <img class="customer-photo" src="<?=Html::encode($client->getPathAvatar())?>" width="120" height="127" alt="<?=Html::encode($client->name)?>">
+                <div class="feedback-wrapper">
+                    <p class="feedback">«<?=Html::encode($review->description)?>»</p>
+                    <p class="task">Задание «<a href="<?=URL::to(['tasks/view', 'id' => $task->id]);?>" class="link link--small"><?=Html::encode($task->title);?></a>» выполнено</p>
+                </div>
+                <div class="feedback-wrapper">
+                    <?=CustomHTML::starts($review->grade)?>
+                    <p class="info-text"><span class="current-time"><?=Yii::$app->formatter->format($review->created, 'relativetime');?></span></p>
+
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif;?>
 </div>
 <div class="right-column">
     <div class="right-card black">

@@ -114,4 +114,9 @@ class User extends \yii\db\ActiveRecord
     {
         return DateTimeHelper::diff(new DateTime($this->birthday))->y;
     }
+
+    public function getPathAvatar()
+    {
+        return '/uploads/avatars/' . $this->avatar;
+    }
 }
