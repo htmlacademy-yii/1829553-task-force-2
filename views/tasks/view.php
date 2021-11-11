@@ -5,6 +5,7 @@ use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\Price;
 use yii\helpers\Html;
 use Mar4hk0\Helpers\HTML as CustomHTML;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $task Task */
@@ -31,7 +32,9 @@ use Mar4hk0\Helpers\HTML as CustomHTML;
                 <img class="customer-photo" src="<?=HTML::encode($performer->getPathAvatar());?>"
                      width="146" height="156" alt="<?=HTML::encode($performer->name)?>">
                 <div class="feedback-wrapper">
-                    <a href="#" class="link link--block link--big"><?=HTML::encode($performer->name)?></a>
+                    <a href="<?=Url::to(['user/view', 'id' => $performer->id])?>" class="link link--block link--big">
+                        <?=HTML::encode($performer->name)?>
+                    </a>
                     <div class="response-wrapper">
                         <?=CustomHTML::starts($performer->rating, 'big')?>
                         <p class="reviews"><?=Html::encode($performer->getReviews()->count())?> отзыва</p>
