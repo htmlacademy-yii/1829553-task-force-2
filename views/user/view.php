@@ -13,7 +13,8 @@ use yii\helpers\Html;
     <h3 class="head-main"><?=Html::encode($performer->name)?></h3>
     <div class="user-card">
         <div class="photo-rate">
-            <img class="card-photo" src="<?=Html::encode($performer->getPathAvatar())?>" width="191" height="190" alt="<?=Html::encode($performer->name)?>">
+            <img class="card-photo" src="<?=Html::encode($performer->getPathAvatar())?>" width="191" height="190"
+                 alt="<?=Html::encode($performer->name)?>">
             <div class="card-rate">
                 <?=CustomHTML::starts($performer->rating, 'big')?>
                 <span class="current-rate"><?=Html::encode($performer->rating)?></span>
@@ -29,7 +30,9 @@ use yii\helpers\Html;
             <ul class="special-list">
                 <?php foreach ($performer->categories as $category): ?>
                     <li class="special-item">
-                        <a href="#" class="link link--regular"><?=Html::encode($category->human_name)?></a>
+                        <a href="<?=HTML::encode(Url::to(['tasks/index', 'TaskSearchForm' => ['filterCategories' => [$category->id]]]))?>"
+                           class="link link--regular"><?=Html::encode($category->human_name)?>
+                        </a>
                     </li>
                 <?php endforeach;?>
             </ul>
@@ -51,14 +54,21 @@ use yii\helpers\Html;
                 $task = $review->task;
             ?>
             <div class="response-card">
-                <img class="customer-photo" src="<?=Html::encode($client->getPathAvatar())?>" width="120" height="127" alt="<?=Html::encode($client->name)?>">
+                <img class="customer-photo" src="<?=Html::encode($client->getPathAvatar())?>" width="120" height="127"
+                     alt="<?=Html::encode($client->name)?>">
                 <div class="feedback-wrapper">
                     <p class="feedback">«<?=Html::encode($review->description)?>»</p>
-                    <p class="task">Задание «<a href="<?=URL::to(['tasks/view', 'id' => $task->id]);?>" class="link link--small"><?=Html::encode($task->title);?></a>» выполнено</p>
+                    <p class="task">Задание «<a href="<?=URL::to(['tasks/view', 'id' => $task->id]);?>"
+                                                class="link link--small"><?=Html::encode($task->title);?>
+                        </a>» выполнено</p>
                 </div>
                 <div class="feedback-wrapper">
                     <?=CustomHTML::starts($review->grade)?>
-                    <p class="info-text"><span class="current-time"><?=Yii::$app->formatter->format($review->created, 'relativetime');?></span></p>
+                    <p class="info-text">
+                        <span class="current-time">
+                            <?=Yii::$app->formatter->format($review->created, 'relativetime');?>
+                        </span>
+                    </p>
 
                 </div>
             </div>
@@ -70,7 +80,10 @@ use yii\helpers\Html;
         <h4 class="head-card">Статистика исполнителя</h4>
         <dl class="black-list">
             <dt>Всего заказов</dt>
-            <dd><?=Html::encode($performer->getNumberTaskCompleted())?> выполнено, <?=Html::encode($performer->getNumberTaskFailed())?> провалено</dd>
+            <dd>
+                <?=Html::encode($performer->getNumberTaskCompleted())?> выполнено,
+                <?=Html::encode($performer->getNumberTaskFailed())?> провалено
+            </dd>
             <dt>Место в рейтинге</dt>
             <dd><?=Html::encode($performer->getPlaceRating())?> место</dd>
             <dt>Дата регистрации</dt>
