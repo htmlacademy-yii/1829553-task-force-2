@@ -77,6 +77,13 @@ class Review extends \yii\db\ActiveRecord
         ];
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $this->updateRating();
+    }
+
     /**
      * Gets query for [[Client]].
      *
@@ -105,5 +112,27 @@ class Review extends \yii\db\ActiveRecord
     public function getTask()
     {
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
+    }
+
+    private function updateRating()
+    {
+        $rating = $this->getRatingValue();
+
+        $performer = $this->performer;
+        $performer->rating = $rating;
+        $performer->save();
+    }
+
+    private function getRatingValue(): float
+    {
+        $sumGrades = self::find()->where(['performer_id' => $this->performer_id])->sum('grade');
+        $numReviews = self::find()->where(['performer_id' => $this->performer_id])->count();
+        $numTaskFailed = $this->performer->getNumberTaskFailed();
+
+        if (empty($sumGrades) || empty($numReviews + $numTaskFailed)) {
+            return 0;
+        }
+
+        return $sumGrades/($numReviews + $numTaskFailed);
     }
 }
