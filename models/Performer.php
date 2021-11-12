@@ -139,4 +139,23 @@ class Performer extends User
         }
         return $msg;
     }
+
+    public function updateRating(int $grade): void
+    {
+        $this->rating = $this->getRatingValue();
+        $this->save();
+    }
+
+    private function getRatingValue(): float
+    {
+        $sumGrades = Review::find()->where(['performer_id' => $this->id])->sum('grade');
+        $numReviews = Review::find()->where(['performer_id' => $this->id])->count();
+        $numTaskFailed = $this->getNumberTaskFailed();
+
+        if (empty($sumGrades) || empty($numReviews + $numTaskFailed)) {
+            return 0;
+        }
+
+        return $sumGrades/($numReviews + $numTaskFailed);
+    }
 }
