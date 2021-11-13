@@ -52,9 +52,10 @@ class User extends \yii\db\ActiveRecord
         return [
             [['email', 'name', 'password', 'birthday', 'is_client', 'city_id', 'created'], 'required'],
             [['birthday', 'created'], 'safe'],
-            [['is_client', 'hide_contacts', 'city_id'], 'integer'],
+            [['hide_contacts', 'city_id'], 'integer'],
             [['about'], 'string'],
             [['rating'], 'number'],
+            [['is_client'], 'boolean'],
             [['email', 'name', 'avatar'], 'string', 'max' => 255],
             [['password', 'telegram'], 'string', 'max' => 64],
             [['phone'], 'string', 'max' => 11],
@@ -119,4 +120,27 @@ class User extends \yii\db\ActiveRecord
     {
         return '/uploads/avatars/' . $this->avatar;
     }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        foreach (self::$users as $user) {
+            if (strcasecmp($user['username'], $username) === 0) {
+                return new static($user);
+            }
+        }
+
+        return null;
+    }
+
+    public function setPassword(string $password)
+    {
+        $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
+    }
+
 }

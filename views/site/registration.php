@@ -45,13 +45,12 @@ use yii\bootstrap4\Html;
                 ->label('Повтор пароля', ['class' => 'control-label']);
             ?>
             <?= $form->field($registration, 'birthday')
-                ->widget(DatePicker::classname(), [
+                ->widget(DatePicker::class, [
                     'name' => 'birthday',
                     'type' => DatePicker::TYPE_INPUT,
-                    'value' => '23-Feb-1982',
                     'pluginOptions' => [
-                        'autoclose'=>true,
-                        'format' => 'dd-M-yyyy'
+                        'autoclose' => true,
+                        'format' => 'yyyy-m-dd'
                     ]
                 ])
                 ->label('Ваш день рождения', ['class' => 'control-label'])

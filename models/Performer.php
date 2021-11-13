@@ -24,22 +24,25 @@ class Performer extends User
      */
     public function rules()
     {
-        return [
-            [['email', 'name', 'password', 'birthday', 'is_client', 'city_id', 'created'], 'required'],
-            [['birthday', 'created', 'isBusy'], 'safe'],
-            [['is_client', 'hide_contacts', 'city_id'], 'integer'],
-            [['about'], 'string'],
-            [['rating'], 'number'],
-            [['email', 'name', 'avatar'], 'string', 'max' => 255],
-            [['password', 'telegram'], 'string', 'max' => 64],
-            [['phone'], 'string', 'max' => 11],
-            [['email'], 'unique'],
-            [['city_id'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass' => City::className(),
-                'targetAttribute' => ['city_id' => 'id']],
-        ];
+       $rules = parent::rules();
+       $rules[] =  [['isBusy'], 'safe'];
+       return $rules;
+//        return [
+//            [['email', 'name', 'password', 'birthday', 'is_client', 'city_id', 'created'], 'required'],
+//            [['birthday', 'created', 'isBusy'], 'safe'],
+//            [['is_client', 'hide_contacts', 'city_id'], 'integer'],
+//            [['about'], 'string'],
+//            [['rating'], 'number'],
+//            [['email', 'name', 'avatar'], 'string', 'max' => 255],
+//            [['password', 'telegram'], 'string', 'max' => 64],
+//            [['phone'], 'string', 'max' => 11],
+//            [['email'], 'unique'],
+//            [['city_id'],
+//                'exist',
+//                'skipOnError' => true,
+//                'targetClass' => City::className(),
+//                'targetAttribute' => ['city_id' => 'id']],
+//        ];
     }
 
     public function afterFind()
@@ -47,7 +50,7 @@ class Performer extends User
         parent::afterFind();
 
         $this->isBusy = false;
-        if ($this->getTasks()->where(['status_id' => Status::STATUS_IN_PROCESS])->all()) {
+        if ($this->getTasks()->where(['status_id' => Status::getStatusInProcessId()])->all()) {
             $this->isBusy = true;
         }
     }
