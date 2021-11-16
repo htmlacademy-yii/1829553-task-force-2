@@ -2,59 +2,57 @@
 
 namespace app\services;
 
-use DateTime;
-use Exception;
 use Mar4hk0\Helpers\DateTimeHelper;
-use Mar4hk0\Helpers\StringHelper;
+use Mar4hk0\Helpers\Price;
 
 class TaskService
 {
     /* @var $tasks array of Task */
     private array $tasks;
+    /* @var $tasks array of City */
+    private array $cities;
+    /* @var $tasks array of Category */
+    private array $categories;
 
     public function __construct(array $tasks)
     {
         $this->tasks = $tasks;
     }
 
-    public function getListTasks($categoryService, $cityService): array
+    public function setCities(array $cities)
+    {
+        $this->cities = $cities;
+    }
+
+    public function setCategories(array $categories)
+    {
+        $this->categories = $categories;
+    }
+
+    public function getIndex(): array
     {
         $result = [];
 
         foreach ($this->tasks as $task) {
+
+            $cityName = null;
+            if (!$task->remoteJob) {
+                $cityName = $this->cities[$task->city_id]->name;
+            }
+
             $result[$task->id] = [
                 'task_id' => $task->id,
                 'title' => $task->title,
                 'description' => $task->description,
-                'price' => $this->getPriceHuman($task->id),
-                'category_human_name' => $categoryService->getHumanName($task->category_id),
-                'city_name' => $cityService->getHumanName($task->city_id),
-                'relative_time' => $this->convertTimeToRelativeTime($task->created),
+                'price' => Price::getPriceHuman($task->price),
+                'category_human_name' => $this->categories[$task->category_id]->getHumanName(),
+                'city_name' => $cityName,
+                'relative_time' => DateTimeHelper::convertTimeToRelative($task->created),
                 'created' => $task->created,
+                'remote_job' => $task->getRemoteJobHuman()
             ];
         }
         return $result;
-    }
-
-    private function convertTimeToRelativeTime(string $created): string
-    {
-        $interval = DateTimeHelper::diff(new DateTime($created));
-        if ($year = $interval->format('%y')) {
-            return StringHelper::getPluralNoun($year, 'год', 'года', 'лет');
-        }
-        if ($month = $interval->format('%m')) {
-            return StringHelper::getPluralNoun($month, 'месяц', 'месяца', 'месяцев');
-        }
-        if ($day = $interval->format('%d')) {
-            return StringHelper::getPluralNoun($day, 'день', 'дня', 'дней');
-        }
-        if ($hour = $interval->format('%h')) {
-            return StringHelper::getPluralNoun($hour, 'час', 'часа', 'часов');
-        }
-        if ($minute = $interval->format('%i')) {
-            return StringHelper::getPluralNoun($minute, 'минута', 'минуты', 'минут');
-        }
-        return 'только что';
     }
 
     public function getListPeriods(): array
@@ -70,16 +68,5 @@ class TaskService
         ];
     }
 
-    public function getPriceHuman(int $taskId): string
-    {
-        $sign = '₽';
-        if (empty($this->tasks[$taskId])) {
-            throw new Exception('Такой задачи не существует в списках');
-        }
-        if (empty($this->tasks[$taskId]->price)) {
-            return 'Договорная';
-        }
-        return $this->tasks[$taskId]->price . ' ' . $sign;
-    }
 
 }

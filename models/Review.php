@@ -77,6 +77,13 @@ class Review extends \yii\db\ActiveRecord
         ];
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $this->performer->updateRating($this->grade);
+    }
+
     /**
      * Gets query for [[Client]].
      *

@@ -19,15 +19,21 @@ $this->title = 'Новые задания';
     <?php foreach ($listTasks as $key => $item) : ?>
         <div class="task-card">
             <div class="header-task">
-                <a  href="#" class="link link--block link--big"><?= Html::encode($item['title'])?></a>
+                <a  href="<?=Url::to('tasks/view/' . $item['task_id'], true)?>"
+                    class="link link--block link--big">
+                    <?= Html::encode($item['title'])?>
+                </a>
                 <p class="price price--task"><?= Html::encode($item['price'])?></p>
             </div>
             <p class="info-text"><span class="current-time"><?= Html::encode($item['relative_time'])?></span> назад</p>
             <p class="task-text"><?= Html::encode($item['description'])?></p>
             <div class="footer-task">
+                <?php if (empty($item['city_name'])): ?>
+                    <?php $item['city_name'] = $item['remote_job'];?>
+                <?php endif; ?>
                 <p class="info-text town-text"><?= Html::encode($item['city_name'])?></p>
                 <p class="info-text category-text"><?= Html::encode($item['category_human_name'])?></p>
-                <a href="<?=Url::to('task/' . $item['task_id'], true)?>" class="button button--black">
+                <a href="<?=Url::to('tasks/view/' . $item['task_id'], true)?>" class="button button--black">
                     Смотреть Задание
                 </a>
             </div>

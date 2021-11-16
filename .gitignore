@@ -50,4 +50,3 @@ phpunit.phar
 package-lock.json
 
 db.php
-web.php

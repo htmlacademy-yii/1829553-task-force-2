@@ -12,25 +12,36 @@ $birthday = $faker->dateTimeBetween('-50 years', '-20 years')
 $created = $faker->dateTimeBetween('-6 months', '-1 week')
     ->format('Y-m-d H:i:s');
 
-$is_client = $faker->boolean(30);
+$isClient = $faker->boolean(30);
 $cityIds = City::find()->select('id')->column();
+
+$userName = $faker->name;
+$avatar = new LasseRafn\InitialAvatarGenerator\InitialAvatar();
+$image = $avatar->name($userName)
+    ->size(191)
+    ->background('#8BC34A')
+    ->color('#fff')
+    ->generate();
+$fileName = Yii::$app->security->generateRandomString(10) . '.png';
+$filePath = Yii::getAlias('@avatars') . '/' . $fileName;
+$image->save($filePath);
 
 $user = [
     'email' => $faker->email,
-    'name' => $faker->name,
+    'name' => $userName,
     'password' => Yii::$app->getSecurity()->generatePasswordHash('password_' . $index),
     'birthday' => $birthday,
-    'is_client' => $is_client,
+    'is_client' => $isClient,
     'city_id' =>  $faker->randomElement($cityIds),
     'created' => $created,
+    'avatar' => $fileName,
 ];
 
-if (!$is_client) {
+if (!$isClient) {
     $user += [
         'about' => $faker->about(),
         'phone' => substr($faker->e164PhoneNumber, 1, 11),
         'telegram' => '@' . $faker->word,
-        'avatar' => $faker->word,
         'hide_contacts' => $faker->boolean(30),
         'rating' => number_format($faker->randomFloat(5, 0, 5), 2),
     ];
