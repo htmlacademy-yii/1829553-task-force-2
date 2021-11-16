@@ -6,6 +6,7 @@ use cebe\markdown\tests\MarkdownOLStartNumTest;
 use DateTime;
 use Mar4hk0\Helpers\DateTimeHelper;
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "users".
@@ -31,7 +32,7 @@ use Yii;
  * @property int $CURRENT_CONNECTIONS [bigint]
  * @property int $TOTAL_CONNECTIONS [bigint]
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
     public const CLIENT = true;
@@ -58,7 +59,7 @@ class User extends \yii\db\ActiveRecord
             [['is_client'], 'boolean'],
             [['email', 'name', 'avatar'], 'string', 'max' => 255],
             [['password', 'telegram'], 'string', 'max' => 64],
-            [['phone'], 'string', 'max' => 11],
+            ['phone', 'match', 'pattern' => '/^[\d]{11}/i', 'message' => 'Номер телефона должен состоять из 11 цифр'],
             [['email'], 'unique'],
             [['city_id'],
                 'exist',
@@ -143,4 +144,32 @@ class User extends \yii\db\ActiveRecord
         $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
     }
 
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    public function getAuthKey()
+    {
+        // TODO: Implement getAuthKey() method.
+    }
+    public function validateAuthKey($authKey)
+    {
+        // TODO: Implement validateAuthKey() method.
+    }
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        // TODO: Implement findIdentityByAccessToken() method.
+    }
+
+
+    public function validatePassword($password): bool
+    {
+        return \Yii::$app->security->validatePassword($password, $this->password);
+    }
 }
