@@ -23,7 +23,8 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<header class="page-header">
+<?php if (Yii::$app->request->getPathInfo() != 'site/registration'): ?>
+    <header class="page-header">
     <nav class="main-nav">
         <a href='#' class="header-logo">
             <img class="logo-image" src="/img/logotype.png" width=227 height=60 alt="taskforce">
@@ -67,6 +68,8 @@ AppAsset::register($this);
         </div>
     </div>
 </header>
+<?php endif; ?>
+
 <main class="main-content container">
     <?= Breadcrumbs::widget([
         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

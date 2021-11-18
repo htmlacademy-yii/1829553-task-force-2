@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use phpDocumentor\Reflection\Types\This;
 use Yii;
 
 /**
@@ -69,5 +70,10 @@ class City extends \yii\db\ActiveRecord
     public function getUsers()
     {
         return $this->hasMany(User::className(), ['city_id' => 'id']);
+    }
+
+    public static function getDefaultCity(): self
+    {
+        return self::find()->limit(1)->one();
     }
 }

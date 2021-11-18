@@ -9,6 +9,7 @@ namespace app\models;
  */
 class Client extends User
 {
+
     /**
      * Gets query for [[Reviews]].
      *
