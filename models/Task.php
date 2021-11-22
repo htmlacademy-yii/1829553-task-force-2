@@ -228,6 +228,15 @@ class Task extends \yii\db\ActiveRecord
             ->all();
     }
 
-
+    public static function getLastTasks(int $num): array
+    {
+        $statusId = Status::getStatusNewId();
+        return Task::find()
+            ->where(['status_id' => $statusId])
+            ->orderBy(['created' => SORT_DESC])
+            ->indexBy('id')
+            ->limit($num)
+            ->all();
+    }
 
 }

@@ -3,9 +3,20 @@
 namespace app\controllers;
 
 use app\models\LoginForm;
+use app\models\Task;
 
 class LandingController extends \yii\web\Controller
 {
+
+    public $layout = 'landing';
+
+    public function actionIndex()
+    {
+        $tasks = Task::getLastTasks(4);
+
+        return $this->render('index', ['tasks' => $tasks]);
+    }
+
     public function actionLogin()
     {
         $loginForm = new LoginForm();
