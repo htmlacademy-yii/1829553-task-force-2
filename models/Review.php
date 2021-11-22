@@ -113,4 +113,14 @@ class Review extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
     }
+
+    public static function getSumGrades(int $performerId): int
+    {
+        return self::find()->where(['performer_id' => $performerId])->sum('grade');
+    }
+
+    public static function getNumReviews(int $performerId): int
+    {
+        return self::find()->where(['performer_id' => $performerId])->count();
+    }
 }
