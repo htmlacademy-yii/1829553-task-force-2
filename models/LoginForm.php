@@ -6,8 +6,8 @@ use yii\base\Model;
 
 class LoginForm extends Model
 {
-    public string $email;
-    public string $password;
+    public string $email = '';
+    public string $password = '';
 
     private User $user;
 
@@ -15,6 +15,7 @@ class LoginForm extends Model
     {
         return [
             [['email', 'password'], 'required'],
+            ['email', 'email'],
             ['password', 'validatePassword'],
         ];
     }
