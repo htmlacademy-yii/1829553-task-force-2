@@ -13,6 +13,5 @@ class LandingAsset extends AssetBundle
     ];
     public $js = [
         'js/main.js',
-        'js/messenger.js'
     ];
 }
