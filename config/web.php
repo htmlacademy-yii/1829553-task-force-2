@@ -48,6 +48,7 @@ $config = [
         'showScriptName' => false,
         'enableStrictParsing' => false,
         'rules' => [
+            '/' => 'landing/index',
             'tasks/view/<id>' => 'tasks/view',
             'user/view/<id>' => 'user/view',
         ],

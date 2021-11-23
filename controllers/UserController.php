@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\models\Performer;
 use yii\web\NotFoundHttpException;
 
-class UserController extends \yii\web\Controller
+class UserController extends SecuredController
 {
     public function actionView($id)
     {

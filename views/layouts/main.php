@@ -9,6 +9,7 @@ use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -46,27 +47,30 @@ AppAsset::register($this);
             </ul>
         </div>
     </nav>
-    <div class="user-block">
-        <a href="#">
-            <img class="user-photo" src="/img/man-glasses.png" width="55" height="55" alt="Аватар">
-        </a>
-        <div class="user-menu">
-            <p class="user-name">Василий</p>
-            <div class="popup-head">
-                <ul class="popup-menu">
-                    <li class="menu-item">
-                        <a href="#" class="link">Настройки</a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="link">Связаться с нами</a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="link">Выход из системы</a>
-                    </li>
-                </ul>
+    <?php if (!empty(Yii::$app->params['user'])): ?>
+        <?php $user = Yii::$app->params['user']; ?>
+        <div class="user-block">
+            <a href="#">
+                <img class="user-photo" src="<?=Yii::getAlias('@avatars') . '/' . $user->avatar ?>" width="55" height="55" alt="Аватар">
+            </a>
+            <div class="user-menu">
+                <p class="user-name"><?=Html::encode($user->name)?></p>
+                <div class="popup-head">
+                    <ul class="popup-menu">
+                        <li class="menu-item">
+                            <a href="#" class="link">Настройки</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" class="link">Связаться с нами</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="<?=Url::to('/site/logout')?>" class="link">Выход из системы</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 </header>
 <?php endif; ?>
 

@@ -151,8 +151,8 @@ class Performer extends User
 
     private function getRatingValue(): float
     {
-        $sumGrades = Review::find()->where(['performer_id' => $this->id])->sum('grade');
-        $numReviews = Review::find()->where(['performer_id' => $this->id])->count();
+        $sumGrades = Review::getSumGrades($this->id);
+        $numReviews = Review::getNumReviews($this->id);
         $numTaskFailed = $this->getNumberTaskFailed();
 
         if (empty($sumGrades) || empty($numReviews + $numTaskFailed)) {
