@@ -25,9 +25,15 @@ class LandingController extends \yii\web\Controller
             if ($loginForm->validate()) {
                 $user = $loginForm->getUser();
                 \Yii::$app->user->login($user);
-                return $this->goHome();
+                return $this->redirect('/tasks/index');
             }
         }
+    }
+
+    public function actionLogout()
+    {
+        \Yii::$app->user->logout();
+        return $this->goHome();
     }
 
 }

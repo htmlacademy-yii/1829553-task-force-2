@@ -9,7 +9,7 @@ class LoginForm extends Model
     public string $email = '';
     public string $password = '';
 
-    private User $user;
+    private ?User $user = null;
 
     public function rules()
     {
@@ -30,7 +30,7 @@ class LoginForm extends Model
         }
     }
 
-    protected function getUser(): ?User
+    public function getUser(): ?User
     {
         if ($this->user === null) {
             $this->user = User::findOne(['email' => $this->email]);
