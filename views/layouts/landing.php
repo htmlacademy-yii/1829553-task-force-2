@@ -5,6 +5,7 @@
 
 use app\assets\LandingAsset;
 use yii\bootstrap4\Html;
+use yii\helpers\Url;
 
 LandingAsset::register($this);
 ?>
@@ -55,7 +56,7 @@ LandingAsset::register($this);
                 <a href="#" class="header__account-enter open-modal" data-for="enter-form">
                     <span>Вход</span></a>
                 или
-                <a href="signup.html" class="header__account-registration">
+                <a href="<?=Url::to('/site/registration')?>" class="header__account-registration">
                     Регистрация
                 </a>
             </div>
@@ -69,7 +70,7 @@ LandingAsset::register($this);
                 <p>Сломался кран на кухне? Надо отправить документы? Нет времени самому гулять с собакой?
                     У нас вы быстро найдёте исполнителя для любой жизненной ситуации?<br>
                     Быстро, безопасно и с гарантией. Просто, как раз, два, три. </p>
-                <button class="button">Создать аккаунт</button>
+                <a class="button" href="<?=Url::to('/site/registration')?>">Создать аккаунт</a>
             </div>
             <div class="landing-center">
                 <div class="landing-instruction">
@@ -153,6 +154,9 @@ LandingAsset::register($this);
             </div>
             <div class="landing-bottom">
                 <?= $content ?>
+                <div class="landing-bottom-container">
+                    <a class="button red-button" href="<?=Url::to('/tasks/index')?>">смотреть все задания</a>
+                </div>
             </div>
         </div>
     </main>

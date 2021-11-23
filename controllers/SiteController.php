@@ -2,56 +2,82 @@
 
 namespace app\controllers;
 
-use app\models\City;
-use app\models\RegistrationForm;
 use Yii;
+use app\models\City;
+use app\models\LoginForm;
+use app\models\RegistrationForm;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\filters\AccessControl;
+
 
 class SiteController extends Controller
 {
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function behaviors()
-//    {
-//        return [
-//            'access' => [
-//                'class' => AccessControl::className(),
-//                'only' => ['logout'],
-//                'rules' => [
-//                    [
-//                        'actions' => ['logout'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'logout' => ['post'],
-//                ],
-//            ],
-//        ];
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function actions()
-//    {
-//        return [
-//            'error' => [
-//                'class' => 'yii\web\ErrorAction',
-//            ],
-//            'captcha' => [
-//                'class' => 'yii\captcha\CaptchaAction',
-//                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-//            ],
-//        ];
-//    }
-//
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['logout', 'login', 'registration'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['login'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['registration'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
+
+    /**
+     * Login action.
+     */
+    public function actionLogin()
+    {
+        $loginForm = new LoginForm();
+        if (Yii::$app->request->getIsPost()) {
+            $loginForm->load(\Yii::$app->request->post());
+            if ($loginForm->validate()) {
+                $user = $loginForm->getUser();
+                Yii::$app->user->login($user);
+                return $this->redirect('/tasks/index');
+            }
+        }
+
+        if (!Yii::$app->user->getId()) {
+            $this->goHome();
+        }
+    }
 
     /**
      * Registration action.
@@ -77,17 +103,13 @@ class SiteController extends Controller
         ]);
     }
 
-//    /**
-//     * Logout action.
-//     *
-//     * @return Response
-//     */
-//    public function actionLogout()
-//    {
-//        Yii::$app->user->logout();
-//
-//        return $this->goHome();
-//    }
-
+    /**
+     * Logout action.
+     */
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+        return $this->goHome();
+    }
 
 }

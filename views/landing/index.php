@@ -5,6 +5,7 @@
 use Mar4hk0\Helpers\Price;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $tasks array Tasks*/
@@ -18,21 +19,18 @@ use yii\widgets\ActiveForm;
         <div class="landing-task">
             <div class="landing-task-top task-<?=Html::encode($task->category->system_name)?>"></div>
             <div class="landing-task-description">
-                <h3><a href="#" class="link-regular"><?=StringHelper::truncate(Html::encode($task->title), 15)?>></a></h3>
+                <h3><a href="<?=Url::to(['tasks/view', 'id' => $task->id])?>" class="link-regular"><?=StringHelper::truncate(Html::encode($task->title), 15)?>></a></h3>
                 <p><?=Html::encode(StringHelper::truncate($task->description, 150))?></p>
             </div>
             <div class="landing-task-info">
                 <div class="task-info-left">
-                    <p><a href="#" class="link-regular"><?=Html::encode($task->category->human_name)?></a></p>
+                    <p><a href="<?=Url::to(['tasks/index', 'TaskSearchForm' => ['filterCategories' => [$task->category->id]]])?>" class="link-regular"><?=Html::encode($task->category->human_name)?></a></p>
                     <p><?=Yii::$app->formatter->format($task->created, 'relativetime');?></p>
                 </div>
                 <span><?=HTML::encode(Price::getPriceHuman($task->price));?></span>
             </div>
         </div>
     <?php endforeach;?>
-</div>
-<div class="landing-bottom-container">
-    <button type="button" class="button red-button">смотреть все задания</button>
 </div>
 
 <section class="modal enter-form form-modal" id="enter-form">
@@ -44,7 +42,7 @@ use yii\widgets\ActiveForm;
             'name' => 'registration',
         ],
         'action' => [
-            '/landing/login',
+            '/site/login',
         ],
     ]); ?>
     <?= $form->field($loginForm, 'email')
