@@ -2429,15 +2429,6 @@ footer {
     font-size: 20px;
     margin-top: 17px;
     margin-bottom: 16px; }
-  .form-modal form div {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    margin: 0; }
   .form-modal .form-modal-description {
     text-transform: uppercase;
     color: rgba(57, 57, 57, 0.86);
