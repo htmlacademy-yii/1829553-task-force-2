@@ -19,7 +19,7 @@ $this->title = 'Новые задания';
     <?php foreach ($listTasks as $key => $item) : ?>
         <div class="task-card">
             <div class="header-task">
-                <a  href="<?=Url::to('tasks/view/' . $item['task_id'], true)?>"
+                <a  href="<?=Url::to(['tasks/view', 'id' => $item['task_id']], true)?>"
                     class="link link--block link--big">
                     <?= Html::encode($item['title'])?>
                 </a>
@@ -33,7 +33,7 @@ $this->title = 'Новые задания';
                 <?php endif; ?>
                 <p class="info-text town-text"><?= Html::encode($item['city_name'])?></p>
                 <p class="info-text category-text"><?= Html::encode($item['category_human_name'])?></p>
-                <a href="<?=Url::to('tasks/view/' . $item['task_id'], true)?>" class="button button--black">
+                <a href="<?=Url::to(['tasks/view', 'id' => $item['task_id']], true)?>" class="button button--black">
                     Смотреть Задание
                 </a>
             </div>
