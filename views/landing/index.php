@@ -5,13 +5,10 @@
 use Mar4hk0\Helpers\Price;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $tasks array Tasks*/
-
-$length = 70;
-
+/* @var $loginForm array loginForm*/
 ?>
 
 <div class="landing-bottom-container">
@@ -37,3 +34,28 @@ $length = 70;
 <div class="landing-bottom-container">
     <button type="button" class="button red-button">смотреть все задания</button>
 </div>
+
+<section class="modal enter-form form-modal" id="enter-form">
+    <h2>Вход на сайт</h2>
+    <?php $form = ActiveForm::begin([
+        'id' => 'registration',
+        'method' => 'post',
+        'options' => [
+            'name' => 'registration',
+        ],
+        'action' => [
+            '/landing/login',
+        ],
+    ]); ?>
+    <?= $form->field($loginForm, 'email')
+        ->textInput(['id' => 'enter-email', 'class' => 'enter-form-email input input-middle'])
+        ->label('Email', ['class' => 'form-modal-description']);
+    ?>
+    <?= $form->field($loginForm, 'password')
+        ->passwordInput(['id' => 'enter-password', 'class' => 'enter-form-email input input-middle'])
+        ->label('Пароль', ['class' => 'form-modal-description']);
+    ?>
+    <?= Html::submitButton('Войти', ['class' => 'button']) ?>
+    <?php $form = ActiveForm::end(); ?>
+    <button class="form-modal-close" type="button">Закрыть</button>
+</section>

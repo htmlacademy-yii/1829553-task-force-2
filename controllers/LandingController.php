@@ -13,8 +13,8 @@ class LandingController extends \yii\web\Controller
     public function actionIndex()
     {
         $tasks = Task::getLastTasks(4);
-
-        return $this->render('index', ['tasks' => $tasks]);
+        $loginForm = new LoginForm();
+        return $this->render('index', ['tasks' => $tasks, 'loginForm' => $loginForm]);
     }
 
     public function actionLogin()
