@@ -25,12 +25,12 @@ class TasksController extends SecuredController
         else {
             $newTasks = Task::getTasks(Status::STATUS_NEW);
         }
-        $categories = Category::find()->indexBy('id')->all();
+        $categories = Category::getAll();
 
         $cityIds = array_map(function (Task $task) {
             return $task->city_id;
         }, $newTasks);
-        $cities = City::find()->where(['id' => $cityIds])->indexBy('id')->all();
+        $cities = City::getBatch($cityIds);
 
         $taskService = new TaskService($newTasks);
         $taskService->setCities($cities);

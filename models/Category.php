@@ -87,4 +87,9 @@ class Category extends \yii\db\ActiveRecord
         return $this->human_name ?? 'Категория не существует';
     }
 
+    public static function getAll()
+    {
+        return self::find()->indexBy('id')->all();
+    }
+
 }
