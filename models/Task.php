@@ -54,7 +54,7 @@ class Task extends \yii\db\ActiveRecord
             [['title', 'category_id', 'client_id', 'status_id', 'created'], 'required'],
             [['description'], 'string'],
             [['city_id', 'price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
-            [['deadline', 'created', 'remoteJob'], 'safe'],
+            [['id', 'deadline', 'created', 'remoteJob'], 'safe'],
             [['title', 'address'], 'string', 'max' => 255],
             [['long', 'lat'], 'string', 'max' => 100],
             [['city_id'],
