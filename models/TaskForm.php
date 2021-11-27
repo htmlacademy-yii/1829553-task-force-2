@@ -71,7 +71,7 @@ class TaskForm extends Model
 
                 foreach ($this->filesSource as $item) {
                     /* @var $item UploadedFile*/
-                    $fileName = $this->generateFileName() . '.' . $item->extension;
+                    $fileName = $this->generateFileName($item);
                     $filePath = Yii::getAlias('@files');
                     if (!$item->saveAs($filePath . '/' . $fileName)) {
                         throw new ExceptionFile('Something goes wrong. Can not save file: ' . $fileName);
@@ -93,9 +93,9 @@ class TaskForm extends Model
                 }
 
                 $transaction->commit();
-            } catch(\Exception $e) {
+            } catch(\Throwable $exception) {
                 $transaction->rollBack();
-                throw $e;
+                throw $exception;
             }
             return true;
         }
@@ -103,9 +103,14 @@ class TaskForm extends Model
         return false;
     }
 
-    private function generateFileName(): string
+    private function generateFileName(UploadedFile $file): string
     {
-        return str_replace([',','.', '/', '\\'], '', uniqid(time() . random_int(0, 100), true));
+        $fileName = $file->baseName . '.' . $file->extension;
+        $filePath = Yii::getAlias('@files');
+        if (file_exists($filePath . '/' . $fileName)) {
+            $fileName = $file->baseName . '_' . date('Y_m_d_H_i_s') . '.' . $file->extension;
+        }
+        return $fileName;
     }
 
     public function getTask(): Task
