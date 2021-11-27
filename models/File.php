@@ -33,12 +33,11 @@ class File extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'path', 'client_id', 'task_id', 'created'], 'required'],
-            [['id', 'client_id', 'task_id'], 'integer'],
-            [['created'], 'safe'],
+            [['name', 'path', 'client_id', 'task_id', 'created'], 'required'],
+            [['client_id', 'task_id'], 'integer'],
+            [['id', 'created'], 'safe'],
             [['name', 'path'], 'string', 'max' => 255],
             [['name', 'path'], 'unique', 'targetAttribute' => ['name', 'path']],
-            [['id'], 'unique'],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
         ];
@@ -50,7 +49,6 @@ class File extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'name' => 'Name',
             'path' => 'Path',
             'client_id' => 'User ID',
