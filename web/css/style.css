@@ -1282,9 +1282,6 @@ input[type=checkbox] {
   font-weight: 700;
   color: #989898; }
 
-input[type=date] {
-  height: 20px; }
-
 .registration-form {
   padding-bottom: 122px; }
   .registration-form .half-wrapper input, .registration-form .half-wrapper select {

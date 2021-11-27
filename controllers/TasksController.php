@@ -6,11 +6,16 @@ use app\models\Category;
 use app\models\City;
 use app\models\Task;
 use app\models\Status;
+use app\models\TaskForm;
 use app\models\TaskSearchForm;
+use app\services\CategoryService;
 use app\services\TaskService;
+use Mar4hk0\Exceptions\ExceptionFile;
+use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
-use yii\web\Controller;
+use yii\db\Exception;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class TasksController extends SecuredController
 {
@@ -62,6 +67,30 @@ class TasksController extends SecuredController
                 'task' => $task,
             ]
         );
+    }
+
+    public function actionCreate()
+    {
+        $model = new TaskForm();
+        if ($this->request->isPost) {
+            try {
+                $model->load($this->request->post());
+                $model->filesSource = UploadedFile::getInstances($model, 'filesSource');
+                if (!$model->process()) {
+                    throw new Exception('Something goes wrong!');
+                }
+                $task = $model->getTask();
+                return $this->redirect(['view', 'id' => $task->id]);
+            }
+            catch (ExceptionTask | ExceptionFile $exception) {
+                Yii::$app->session->setFlash('error', $exception->getMessage());
+            }
+        }
+
+        $categoryService = new CategoryService(Category::getAll());
+        $humanCategories = $categoryService->getHumanCategories();
+
+        return $this->render('create', ['model' => $model, 'categories' => $humanCategories]);
     }
 
 }

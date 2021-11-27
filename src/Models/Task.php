@@ -2,7 +2,7 @@
 
 namespace Mar4hk0\Models;
 
-use Mar4hk0\Exceptions\ExceptionTask;
+use Mar4hk0\Exceptions\ExceptionFile;
 
 class Task
 {
@@ -66,7 +66,7 @@ class Task
     }
 
     /**
-     * @throws ExceptionTask
+     * @throws ExceptionFile
      */
     public function getNextStatus(string $action): ?string
     {
@@ -91,7 +91,7 @@ class Task
             }
         }
         if (empty($status)) {
-            throw new ExceptionTask(
+            throw new ExceptionFile(
                 'Could not get Status by action: ' . $action . '. Current status: ' . $this->getStatus()
             );
         }
@@ -99,7 +99,7 @@ class Task
     }
 
     /**
-     * @throws ExceptionTask
+     * @throws ExceptionFile
      */
     public function getActionsByStatus(string $status, int $idCurrentUser): array
     {
@@ -118,7 +118,7 @@ class Task
         }
 
         if (empty($allowedActions)) {
-            throw new ExceptionTask(
+            throw new ExceptionFile(
                 'Could not get Action by status: ' . $status . ' and idCurrentUser:' . $idCurrentUser
             );
         }
