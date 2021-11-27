@@ -19,6 +19,27 @@ use yii\web\UploadedFile;
 
 class TasksController extends SecuredController
 {
+    public function behaviors()
+    {
+        $rules = parent::behaviors();
+        $rule = [
+            'allow' => false,
+            'actions' => ['create'],
+            'matchCallback' => function ($rule, $action) {
+                $result = false;
+                if (!empty(Yii::$app->params['user'])) {
+                    $user = Yii::$app->params['user'];
+                    $result = !(bool)$user->is_client;
+                }
+                return $result;
+            }
+        ];
+
+        array_unshift($rules['access']['rules'], $rule);
+
+        return $rules;
+    }
+
     public function actionIndex()
     {
         $taskSearchForm = new TaskSearchForm();
