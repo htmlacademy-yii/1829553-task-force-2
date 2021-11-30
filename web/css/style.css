@@ -1385,15 +1385,15 @@ input[type=checkbox] {
   margin-right: 50px; }
 
 .new-file {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: end;
-      -ms-flex-align: end;
-          align-items: flex-end;
+  /*display: -webkit-box;*/
+  /*display: -ms-flexbox;*/
+  /*display: flex;*/
+  /*-webkit-box-pack: center;*/
+  /*    -ms-flex-pack: center;*/
+  /*        justify-content: center;*/
+  /*-webkit-box-align: end;*/
+  /*    -ms-flex-align: end;*/
+  /*        align-items: flex-end;*/
   width: 661px;
   padding-bottom: 16px;
   height: 112px;
@@ -1584,4 +1584,18 @@ form .has-error textarea:hover {
 
 #searched-new-tasks input[type=checkbox] {
   margin-right: 5px;
+}
+
+#create-task .new-file label {
+  width: 100%;
+  text-align: center;
+}
+
+#create-task .new-file input#files {
+  display: inline-block;
+  width: 100%;
+  padding: 72px 0 0 0;
+  height: 70px;
+  border: none;
+  cursor: pointer;
 }
