@@ -24,9 +24,11 @@ use yii\helpers\Url;
     </div>
 
 
-    <?php if (!empty($task->bids)): ?>
+    <?php $bids = $task->getAllowedBids(Yii::$app->params['user']); ?>
+    <?php $isShow = $task->isShowButtonBids(Yii::$app->params['user']); ?>
+    <?php if (!empty($bids)): ?>
         <h4 class="head-regular">Отклики на задание</h4>
-        <?php foreach ($task->bids as $bid): ?>
+        <?php foreach ($bids as $bid): ?>
             <?php $performer = $bid->performer;?>
             <div class="response-card">
                 <img class="customer-photo" src="<?=HTML::encode($performer->getPathAvatar());?>"
@@ -51,10 +53,12 @@ use yii\helpers\Url;
                     </p>
                     <p class="price price--small"><?=Html::encode(Price::getPriceHuman($bid->price))?></p>
                 </div>
-                <div class="button-popup">
-                    <a href="#" class="button button--blue button--small">Принять</a>
-                    <a href="#" class="button button--orange button--small">Отказать</a>
-                </div>
+                <?php  if (!empty($isShow)): ?>
+                    <div class="button-popup">
+                        <a href="#" class="button button--blue button--small">Принять</a>
+                        <a href="#" class="button button--orange button--small">Отказать</a>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>

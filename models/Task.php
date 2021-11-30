@@ -267,4 +267,28 @@ class Task extends \yii\db\ActiveRecord
         return $actions;
     }
 
+    public function getAllowedBids(User $user): array
+    {
+        if ($this->client_id == $user->id && $user->is_client) {
+            return $this->bids;
+        }
+        if (!$user->is_client) {
+            foreach ($this->bids as $bid) {
+                if ($bid->performer_id == $user->id) {
+                    return [$bid];
+                }
+            }
+        }
+        return [];
+    }
+
+    public function isShowButtonBids(User $user): bool
+    {
+        if ($this->client_id == $user->id) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
