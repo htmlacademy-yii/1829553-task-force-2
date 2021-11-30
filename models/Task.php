@@ -2,9 +2,8 @@
 
 namespace app\models;
 
+use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
-use yii\base\Exception;
-use yii\i18n\Formatter;
 
 /**
  * This is the model class for table "tasks".
@@ -237,6 +236,35 @@ class Task extends \yii\db\ActiveRecord
             ->indexBy('id')
             ->limit($num)
             ->all();
+    }
+
+    public function getAction(User $user): array
+    {
+        $actions = [];
+        $allowedActions = [];
+        if ($this->status_id == Status::getStatusNewId()) {
+            $allowedActions = array_merge($allowedActions, [new CancelAction(), new BidAction()]);
+            // Если есть отклики, то еще может быть действие "Старт задания"
+            if (!empty($this->bids)) {
+                $allowedActions[] = new StartAction();
+            }
+        }
+        if ($this->status_id == Status::getStatusInProcessId()) {
+            $allowedActions = array_merge($allowedActions, [new RefuseAction(), new FinishAction()]);
+        }
+
+        if (empty($allowedActions)) {
+            throw new ExceptionTask(
+                'Could not get Action by status: ' . $this->status_id
+            );
+        }
+
+        foreach ($allowedActions as $action) {
+            if ($action->checkPermissions($this->performer_id, $this->client_id, $user)) {
+                $actions[] = $action;
+            }
+        }
+        return $actions;
     }
 
 }
