@@ -76,4 +76,9 @@ class City extends \yii\db\ActiveRecord
     {
         return self::find()->limit(1)->one();
     }
+
+    public static function getBatch(array $ids): array
+    {
+        return self::find()->where(['id' => $ids])->indexBy('id')->all();
+    }
 }

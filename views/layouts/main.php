@@ -38,9 +38,11 @@ AppAsset::register($this);
                 <li class="list-item">
                     <a href="#" class="link link--nav" >Мои задания</a>
                 </li>
-                <li class="list-item">
-                    <a href="#" class="link link--nav" >Создать задание</a>
-                </li>
+                <?php if (Yii::$app->params['user']->is_client): ?>
+                    <li class="list-item">
+                        <a href="<?=Url::to(['/tasks/create'])?>" class="link link--nav" >Создать задание</a>
+                    </li>
+                <?php endif; ?>
                 <li class="list-item">
                     <a href="#" class="link link--nav" >Настройки</a>
                 </li>

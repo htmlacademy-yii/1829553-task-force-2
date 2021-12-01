@@ -6,14 +6,40 @@ use app\models\Category;
 use app\models\City;
 use app\models\Task;
 use app\models\Status;
+use app\models\TaskForm;
 use app\models\TaskSearchForm;
+use app\services\CategoryService;
 use app\services\TaskService;
+use Mar4hk0\Exceptions\ExceptionFile;
+use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
-use yii\web\Controller;
+use yii\db\Exception;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class TasksController extends SecuredController
 {
+    public function behaviors()
+    {
+        $rules = parent::behaviors();
+        $rule = [
+            'allow' => false,
+            'actions' => ['create'],
+            'matchCallback' => function ($rule, $action) {
+                $result = false;
+                if (!empty(Yii::$app->params['user'])) {
+                    $user = Yii::$app->params['user'];
+                    $result = !(bool)$user->is_client;
+                }
+                return $result;
+            }
+        ];
+
+        array_unshift($rules['access']['rules'], $rule);
+
+        return $rules;
+    }
+
     public function actionIndex()
     {
         $taskSearchForm = new TaskSearchForm();
@@ -25,12 +51,12 @@ class TasksController extends SecuredController
         else {
             $newTasks = Task::getTasks(Status::STATUS_NEW);
         }
-        $categories = Category::find()->indexBy('id')->all();
+        $categories = Category::getAll();
 
         $cityIds = array_map(function (Task $task) {
             return $task->city_id;
         }, $newTasks);
-        $cities = City::find()->where(['id' => $cityIds])->indexBy('id')->all();
+        $cities = City::getBatch($cityIds);
 
         $taskService = new TaskService($newTasks);
         $taskService->setCities($cities);
@@ -62,6 +88,30 @@ class TasksController extends SecuredController
                 'task' => $task,
             ]
         );
+    }
+
+    public function actionCreate()
+    {
+        $model = new TaskForm();
+        if ($this->request->isPost) {
+            try {
+                $model->load($this->request->post());
+                $model->filesSource = UploadedFile::getInstances($model, 'filesSource');
+                if (!$model->process()) {
+                    throw new Exception('Something goes wrong!');
+                }
+                $task = $model->getTask();
+                return $this->redirect(['view', 'id' => $task->id]);
+            }
+            catch (ExceptionTask | ExceptionFile $exception) {
+                Yii::$app->session->setFlash('error', $exception->getMessage());
+            }
+        }
+
+        $categoryService = new CategoryService(Category::getAll());
+        $humanCategories = $categoryService->getHumanCategories();
+
+        return $this->render('create', ['model' => $model, 'categories' => $humanCategories]);
     }
 
 }

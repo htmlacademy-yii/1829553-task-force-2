@@ -16,4 +16,13 @@ class CategoryService
     {
         return $this->categories[$categoryId]->human_name ?? 'Категория не существует';
     }
+
+    public function getHumanCategories(): array
+    {
+        $result = [];
+        foreach ($this->categories as $categoryId => $item) {
+            $result[$categoryId] = $item->human_name;
+        }
+        return $result;
+    }
 }
