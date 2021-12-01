@@ -242,35 +242,6 @@ class Task extends \yii\db\ActiveRecord
             ->all();
     }
 
-    public function getAction(User $user): array
-    {
-        $actions = [];
-        $allowedActions = [];
-        if ($this->status_id == Status::getStatusNewId()) {
-            $allowedActions = array_merge($allowedActions, [new CancelAction(), new BidAction()]);
-            // Если есть отклики, то еще может быть действие "Старт задания"
-            if (!empty($this->bids)) {
-                $allowedActions[] = new StartAction();
-            }
-        }
-        if ($this->status_id == Status::getStatusInProcessId()) {
-            $allowedActions = array_merge($allowedActions, [new RefuseAction(), new FinishAction()]);
-        }
-
-        if (empty($allowedActions)) {
-            throw new ExceptionTask(
-                'Could not get Action by status: ' . $this->status_id
-            );
-        }
-
-        foreach ($allowedActions as $action) {
-            if ($action->checkPermissions($this->performer_id, $this->client_id, $user)) {
-                $actions[] = $action;
-            }
-        }
-        return $actions;
-    }
-
     public function getAllowedBids(User $user): array
     {
         if ($this->client_id == $user->id && $user->is_client) {
