@@ -25,7 +25,6 @@ use yii\helpers\Url;
 
 
     <?php $bids = $task->getAllowedBids(Yii::$app->params['user']); ?>
-    <?php $isShow = $task->isShowButtonBids(Yii::$app->params['user']); ?>
     <?php if (!empty($bids)): ?>
         <h4 class="head-regular">Отклики на задание</h4>
         <?php foreach ($bids as $bid): ?>
@@ -53,10 +52,10 @@ use yii\helpers\Url;
                     </p>
                     <p class="price price--small"><?=Html::encode(Price::getPriceHuman($bid->price))?></p>
                 </div>
-                <?php  if (!empty($isShow)): ?>
+                <?php  if ($task->isShowButtonBids(Yii::$app->params['user'], $bid)): ?>
                     <div class="button-popup">
-                        <a href="#" class="button button--blue button--small">Принять</a>
-                        <a href="#" class="button button--orange button--small">Отказать</a>
+                        <a href="<?=Url::to(['tasks/accept-bid/', Task::TASK_ID => $bid->task_id, Task::PERFORMER_ID => $bid->performer_id])?>" class="button button--blue button--small">Принять</a>
+                        <a href="<?=Url::to(['bid/refuse', 'id' => $bid->id])?>" class="button button--orange button--small">Отказать</a>
                     </div>
                 <?php endif; ?>
             </div>

@@ -34,6 +34,10 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+
+    public const TASK_ID = 'task_id';
+    public const PERFORMER_ID = 'performer_id';
+
     public bool $remoteJob;
 
     /**
@@ -282,13 +286,25 @@ class Task extends \yii\db\ActiveRecord
         return [];
     }
 
-    public function isShowButtonBids(User $user): bool
+    public function isShowButtonBids(User $user, Bid $bid): bool
     {
+        if ($this->status_id == Status::getStatusInProcessId()) {
+            return false;
+        }
+        if ($bid->is_refused) {
+            return false;
+        }
         if ($this->client_id == $user->id) {
             return true;
         }
 
         return false;
+    }
+
+    public function acceptBid(int $performerId)
+    {
+        $this->status_id = Status::getStatusInProcessId();
+        $this->performer_id = $performerId;
     }
 
 }

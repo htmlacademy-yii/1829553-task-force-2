@@ -51,6 +51,8 @@ $config = [
             '/' => 'landing/index',
             'tasks/view/<id>' => 'tasks/view',
             'user/view/<id>' => 'user/view',
+            'bid/refuse/<id>' => 'bid/refuse',
+            'tasks/accept-bid' => 'tasks/accept-bid',
         ],
     ],
     'formatter' => [
