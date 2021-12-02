@@ -83,6 +83,7 @@ AppAsset::register($this);
     <?= Alert::widget() ?>
     <?= $content ?>
 </main>
+<div class="overlay"></div>
 <?php $this->endBody() ?>
 </body>
 </html>
