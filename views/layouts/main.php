@@ -22,7 +22,7 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php if (Yii::$app->request->getPathInfo() != 'site/registration'): ?>
+<?php if (Yii::$app->request->getPathInfo() !== 'site/registration'): ?>
     <header class="page-header">
     <nav class="main-nav">
         <a href='#' class="header-logo">
