@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Task;
 use yii\base\Model;
 use yii\bootstrap4\Html;
 use yii\web\View;
@@ -7,7 +8,7 @@ use yii\widgets\ActiveForm;
 
 /* @var $this View */
 /* @var $model Model */
-/* @var $taskId int */
+/* @var $task Task */
 
 ?>
 
@@ -32,7 +33,7 @@ use yii\widgets\ActiveForm;
             ->label('Предложение', ['class' => 'form-modal-description']);
         ?>
         <?= $form->field($model, 'task_id')
-            ->hiddenInput(['value' => $taskId])
+            ->hiddenInput(['value' => $task->id])
             ->label(false);
         ?>
         <?= $form->field($model, 'performer_id')
