@@ -18,7 +18,7 @@ class BidController extends SecuredController
             'matchCallback' => function ($rule, $action) {
                 $result = false;
 
-                if (Yii::$app->params['user']->is_client) {
+                if (!Yii::$app->params['user']->is_client) {
                     return true;
                 }
                 if ($this->request->isPost) {
