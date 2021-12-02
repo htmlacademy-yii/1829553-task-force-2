@@ -278,4 +278,9 @@ class Task extends \yii\db\ActiveRecord
         $this->performer_id = $performerId;
     }
 
+    public function cancel(): void
+    {
+        $this->status_id = Status::getStatusCanceledId();
+    }
+
 }
