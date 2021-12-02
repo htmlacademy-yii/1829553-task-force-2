@@ -1,14 +1,14 @@
 <?php
 
-namespace app\models;
+namespace app\models\Buttons;
 
 use yii\base\Model;
 
-class RefuseButton extends Button
+class StartButton extends Button
 {
 
-    private CONST NAME = 'Отказаться';
-    private CONST SYSTEM_NAME = 'action_refuse';
+    private CONST NAME = 'Принять';
+    private CONST SYSTEM_NAME = 'action_start';
 
     public function getTitle(): string
     {
@@ -20,9 +20,9 @@ class RefuseButton extends Button
         return self::SYSTEM_NAME;
     }
 
-    public function checkPermissions(?int $performerID, int $clientID, User $user): bool
+    public function checkPermissions(): bool
     {
-        if ($performerID == $user->id && !$user->is_client) {
+        if (is_null($this->task->performer_id) && $this->task->client_id == $this->user->id && $this->user->is_client) {
             return true;
         }
         return false;
@@ -30,12 +30,12 @@ class RefuseButton extends Button
 
     public function getUrl(): string
     {
-        return '#';
+        // TODO: Implement getUrl() method.
     }
 
     public function isModal(): bool
     {
-        return true;
+        // TODO: Implement isModal() method.
     }
 
     public function createForm(): ?Model

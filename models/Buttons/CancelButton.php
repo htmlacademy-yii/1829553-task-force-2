@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\Buttons;
 
 use yii\base\Model;
 use yii\helpers\Url;
@@ -21,9 +21,9 @@ class CancelButton extends Button
         return self::SYSTEM_NAME;
     }
 
-    public function checkPermissions(?int $performerID, int $clientID, User $user): bool
+    public function checkPermissions(): bool
     {
-        if (is_null($performerID) && $clientID == $user->id && $user->is_client) {
+        if (is_null($this->task->performer_id) && $this->task->client_id == $this->user->id && $this->user->is_client) {
             return true;
         }
         return false;

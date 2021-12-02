@@ -1,7 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\Buttons;
 
+use app\models\Status;
+use app\models\Task;
+use app\models\User;
 use yii\base\Model;
 
 class ButtonCreator
@@ -37,10 +40,10 @@ class ButtonCreator
 //        }
 
         foreach ($allowedButtons as $button) {
-            if ($button->checkPermissions($this->task->performer_id, $this->task->client_id, $this->user)) {
-                $this->button = $button;
-                $this->button->setTask($this->task);
-                return $this->button;
+            $button->setTask($this->task);
+            $button->setUser($this->user);
+            if ($button->checkPermissions()) {
+                return $this->button = $button;
             }
         }
         return null;

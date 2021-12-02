@@ -1,7 +1,8 @@
 <?php
 
-namespace app\models;
+namespace app\models\Buttons;
 
+use app\models\Bid;
 use yii\base\Model;
 
 class BidButton extends Button
@@ -20,9 +21,9 @@ class BidButton extends Button
         return self::SYSTEM_NAME;
     }
 
-    public function checkPermissions(?int $performerID, int $clientID, User $user): bool
+    public function checkPermissions(): bool
     {
-        if (is_null($performerID) && $clientID != $user->id && !$user->is_client) {
+        if (is_null($this->task->performer_id) && $this->task->client_id != $this->user->id && !$this->user->is_client) {
             return true;
         }
 
@@ -41,6 +42,6 @@ class BidButton extends Button
 
     public function createForm(): ?Model
     {
-        return new BidForm();
+        return new Bid();
     }
 }

@@ -2,10 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Buttons\ButtonCreator;
 use app\models\Category;
 use app\models\City;
-use app\models\Client;
-use app\models\Performer;
 use app\models\Task;
 use app\models\Status;
 use app\models\TaskForm;
@@ -100,15 +99,23 @@ class TasksController extends SecuredController
 
     public function actionView($id)
     {
-        $task = Task::findOne([$id]);
+        $task = Task::findOne($id);
         if (empty($task)) {
             throw new NotFoundHttpException();
         }
+
+        $buttonCreator = new ButtonCreator($task, Yii::$app->params['user']);
+        $button = $buttonCreator->createButton();
+        $formButton = $buttonCreator->createForm();
+
+        $r = Yii::$app->params['user'];
 
         return $this->render(
             'view',
             [
                 'task' => $task,
+                'button' => $this->renderPartial('button', ['button' => $button]),
+                'form' => $this->renderPartial('//bids/_form', ['model' => $formButton, 'taskId' => $id]),
             ]
         );
     }
@@ -160,6 +167,17 @@ class TasksController extends SecuredController
                 throw new Exception('Something goes wrong!');
             }
         }
+    }
+
+    public function actionCancel($id)
+    {
+        $task = Task::findOne($id);
+        $task->cancel();
+        if (!$task->save()) {
+            throw new Exception('Something goes wrong!');
+        }
+
+        $this->redirect(Url::to(['tasks/view', 'id' => $id]));
     }
 
 }

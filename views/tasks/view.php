@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Button;
 use app\models\Task;
 use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\Price;
@@ -9,6 +10,8 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $task Task */
+/* @var $button string */
+/* @var $form string */
 ?>
 <div class="left-column">
     <div class="head-wrapper">
@@ -16,7 +19,7 @@ use yii\helpers\Url;
         <p class="price price--big"><?=HTML::encode(Price::getPriceHuman($task->price));?></p>
     </div>
     <p class="task-description"><?=HTML::encode($task->description);?></p>
-    <a href="#" class="button button--blue">Откликнуться на задание</a>
+    <?= $button ?>
     <div class="task-map">
         <img class="map" src="/img/map.png"  width="725" height="346" alt="Новый арбат, 23, к. 1">
         <p class="map-address town">Москва</p>
@@ -90,3 +93,4 @@ use yii\helpers\Url;
         </ul>
     </div>
 </div>
+<?= $form?>

@@ -1,13 +1,14 @@
 <?php
 
-namespace app\models;
+namespace app\models\Buttons;
 
 use yii\base\Model;
 
-class FinishButton extends Button
+class RefuseButton extends Button
 {
-    private CONST NAME = 'Завершить';
-    private CONST SYSTEM_NAME = 'action_finish';
+
+    private CONST NAME = 'Отказаться';
+    private CONST SYSTEM_NAME = 'action_refuse';
 
     public function getTitle(): string
     {
@@ -19,9 +20,9 @@ class FinishButton extends Button
         return self::SYSTEM_NAME;
     }
 
-    public function checkPermissions(?int $performerID, int $clientID, User $user): bool
+    public function checkPermissions(): bool
     {
-        if (!is_null($performerID) && $clientID == $user->id && $user->is_client) {
+        if ($this->task->performer_id == $this->user->id && !$this->user->is_client) {
             return true;
         }
         return false;

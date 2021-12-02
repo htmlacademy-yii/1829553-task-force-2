@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "bids".
  *
@@ -41,6 +39,7 @@ class Bid extends \yii\db\ActiveRecord
             [['id', 'created'], 'safe'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
             [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['performer_id' => 'id']],
+            ['price', 'integer', 'min' => 1],
         ];
     }
 
