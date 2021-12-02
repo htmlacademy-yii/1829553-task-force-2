@@ -23,6 +23,10 @@ class BidButton extends Button
 
     public function checkPermissions(): bool
     {
+        if ($this->task->getBids()->where(['performer_id' => $this->user->id])->exists()) {
+            return false;
+        }
+
         if (is_null($this->task->performer_id) && $this->task->client_id != $this->user->id && !$this->user->is_client) {
             return true;
         }
