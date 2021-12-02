@@ -2,13 +2,16 @@
 
 namespace app\models;
 
-class CancelAction extends Action
+use yii\base\Model;
+use yii\helpers\Url;
+
+class CancelButton extends Button
 {
 
     private CONST NAME = 'Отменить';
     private CONST SYSTEM_NAME = 'action_cancel';
 
-    public function getName(): string
+    public function getTitle(): string
     {
         return self::NAME;
     }
@@ -24,5 +27,21 @@ class CancelAction extends Action
             return true;
         }
         return false;
+    }
+
+    public function getUrl(): string
+    {
+        $task = $this->getTask();
+        return Url::to(['tasks/cancel', 'id' => $task->id]);
+    }
+
+    public function isModal(): bool
+    {
+        return false;
+    }
+
+    public function createForm(): ?Model
+    {
+        return null;
     }
 }

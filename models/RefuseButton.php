@@ -2,13 +2,15 @@
 
 namespace app\models;
 
-class RefuseAction extends Action
+use yii\base\Model;
+
+class RefuseButton extends Button
 {
 
     private CONST NAME = 'Отказаться';
     private CONST SYSTEM_NAME = 'action_refuse';
 
-    public function getName(): string
+    public function getTitle(): string
     {
         return self::NAME;
     }
@@ -24,5 +26,20 @@ class RefuseAction extends Action
             return true;
         }
         return false;
+    }
+
+    public function getUrl(): string
+    {
+        return '#';
+    }
+
+    public function isModal(): bool
+    {
+        return true;
+    }
+
+    public function createForm(): ?Model
+    {
+        // TODO: Implement createForm() method.
     }
 }

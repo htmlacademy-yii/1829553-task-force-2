@@ -2,13 +2,15 @@
 
 namespace app\models;
 
-class StartAction extends Action
+use yii\base\Model;
+
+class StartButton extends Button
 {
 
     private CONST NAME = 'Принять';
     private CONST SYSTEM_NAME = 'action_start';
 
-    public function getName(): string
+    public function getTitle(): string
     {
         return self::NAME;
     }
@@ -24,5 +26,20 @@ class StartAction extends Action
             return true;
         }
         return false;
+    }
+
+    public function getUrl(): string
+    {
+        // TODO: Implement getUrl() method.
+    }
+
+    public function isModal(): bool
+    {
+        // TODO: Implement isModal() method.
+    }
+
+    public function createForm(): ?Model
+    {
+        // TODO: Implement createForm() method.
     }
 }

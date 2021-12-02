@@ -2,13 +2,15 @@
 
 namespace app\models;
 
-class BidAction extends Action
+use yii\base\Model;
+
+class BidButton extends Button
 {
 
     private CONST NAME = 'Откликнуться';
     private CONST SYSTEM_NAME = 'action_respond';
 
-    public function getName(): string
+    public function getTitle(): string
     {
         return self::NAME;
     }
@@ -25,5 +27,20 @@ class BidAction extends Action
         }
 
         return false;
+    }
+
+    public function getUrl(): string
+    {
+        return '#';
+    }
+
+    public function isModal(): bool
+    {
+        return true;
+    }
+
+    public function createForm(): ?Model
+    {
+        return new BidForm();
     }
 }

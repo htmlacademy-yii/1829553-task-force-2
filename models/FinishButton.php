@@ -2,12 +2,14 @@
 
 namespace app\models;
 
-class FinishAction extends Action
+use yii\base\Model;
+
+class FinishButton extends Button
 {
     private CONST NAME = 'Завершить';
     private CONST SYSTEM_NAME = 'action_finish';
 
-    public function getName(): string
+    public function getTitle(): string
     {
         return self::NAME;
     }
@@ -23,5 +25,20 @@ class FinishAction extends Action
             return true;
         }
         return false;
+    }
+
+    public function getUrl(): string
+    {
+        return '#';
+    }
+
+    public function isModal(): bool
+    {
+        return true;
+    }
+
+    public function createForm(): ?Model
+    {
+        // TODO: Implement createForm() method.
     }
 }
