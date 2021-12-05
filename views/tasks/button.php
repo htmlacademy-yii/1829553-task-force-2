@@ -1,7 +1,9 @@
 <?php
 
+use app\models\Buttons\Button;
+
 /* @var $this \yii\web\View */
-/* @var $button \app\models\Button|null */
+/* @var $button Button|null */
 
 ?>
 
