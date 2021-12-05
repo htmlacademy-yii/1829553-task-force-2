@@ -19,7 +19,7 @@ use Yii;
  * @property Performer $performer
  * @property Task $task
  */
-class Review extends \yii\db\ActiveRecord
+class Review extends \yii\db\ActiveRecord implements Modable
 {
     /**
      * {@inheritdoc}
@@ -35,10 +35,11 @@ class Review extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'client_id', 'performer_id', 'task_id', 'description', 'grade', 'created'], 'required'],
+            [['client_id', 'performer_id', 'task_id', 'description', 'grade', 'created'], 'required'],
             [['id', 'client_id', 'performer_id', 'task_id', 'grade'], 'integer'],
-            [['created'], 'safe'],
+            [['id', 'created'], 'safe'],
             [['description'], 'string', 'max' => 255],
+            ['grade', 'integer', 'min' => 1, 'max' => 5],
             [['client_id', 'performer_id', 'task_id'],
                 'unique',
                 'targetAttribute' => ['client_id', 'performer_id', 'task_id']],
@@ -122,5 +123,10 @@ class Review extends \yii\db\ActiveRecord
     public static function getNumReviews(int $performerId): int
     {
         return self::find()->where(['performer_id' => $performerId])->count();
+    }
+
+    public function getViewName(): string
+    {
+        return '//reviews/_form';
     }
 }

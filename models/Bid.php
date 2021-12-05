@@ -16,7 +16,7 @@ namespace app\models;
  * @property Performer $performer
  * @property Task $task
  */
-class Bid extends \yii\db\ActiveRecord
+class Bid extends \yii\db\ActiveRecord implements Modable
 {
     /**
      * {@inheritdoc}
@@ -82,5 +82,10 @@ class Bid extends \yii\db\ActiveRecord
     public function refuse(): void
     {
         $this->is_refused = true;
+    }
+
+    public function getViewName(): string
+    {
+        return '//bids/_form';
     }
 }
