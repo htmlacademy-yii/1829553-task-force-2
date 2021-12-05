@@ -1636,7 +1636,7 @@ form .has-error textarea:hover {
 .enter-form {
   display: none; }
 
-.bid-form {
+.bid-form, .review-form {
   display: none;
   width: 480px;
   margin-left: -260px; }
