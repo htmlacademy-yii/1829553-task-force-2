@@ -269,10 +269,7 @@ class Task extends \yii\db\ActiveRecord
 
     public function isShowButtonBids(User $user, Bid $bid): bool
     {
-        if ($this->status_id == Status::getStatusInProcessId()) {
-            return false;
-        }
-        if ($bid->is_refused) {
+        if ($bid->is_refused || $this->status_id != Status::getStatusNewId()) {
             return false;
         }
         if ($this->client_id == $user->id) {

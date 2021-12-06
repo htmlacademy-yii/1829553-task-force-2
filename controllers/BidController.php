@@ -18,7 +18,7 @@ class BidController extends SecuredController
             'matchCallback' => function ($rule, $action) {
                 $result = false;
 
-                if (!Yii::$app->params['user']->is_client) {
+                if (Yii::$app->params['user']->is_client) {
                     return true;
                 }
                 if ($this->request->isPost) {
@@ -42,9 +42,9 @@ class BidController extends SecuredController
         return $rules;
     }
 
-    public function actionRefuse($bidId)
+    public function actionRefuse($id)
     {
-        $bid = Bid::findOne($bidId);
+        $bid = Bid::findOne($id);
         $bid->refuse();
         if (!$bid->save()) {
             throw new Exception('Something goes wrong!');

@@ -42,7 +42,7 @@ class ReviewController extends SecuredController
         return $rules;
     }
 
-    public function actionCreate(): void
+    public function actionCreate()
     {
 
         $review = $this->getReview();
@@ -59,7 +59,7 @@ class ReviewController extends SecuredController
             if (!$review->save())  {
                 throw new BadRequestHttpException();
             }
-            $this->redirect(Url::to(['tasks/view', 'id' => $review->task_id]));
+            return $this->redirect(Url::to(['tasks/view', 'id' => $review->task_id]));
         }
 
         throw new BadRequestHttpException();

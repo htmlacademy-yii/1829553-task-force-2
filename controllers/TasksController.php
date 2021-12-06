@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Buttons\ButtonCreator;
 use app\models\Category;
 use app\models\City;
+use app\models\RefuseForm;
 use app\models\Task;
 use app\models\Status;
 use app\models\TaskForm;
@@ -15,7 +16,6 @@ use app\services\TaskService;
 use Mar4hk0\Exceptions\ExceptionFile;
 use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
-use yii\db\Exception;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -51,6 +51,25 @@ class TasksController extends SecuredController
                         if ($task->client_id == Yii::$app->params['user']->id && !$user->is_client) {
                             $result = false;
                         }
+                    }
+
+                    return $result;
+                }
+            ],
+            [
+                'allow' => false,
+                'actions' => ['refuse'],
+                'matchCallback' => function ($rule, $action) {
+                    $result = false;
+                    if (!empty(Yii::$app->params['user']) && $refuseForm = $this->getRefuse() !== null) {
+                        $task = Task::findOne($refuseForm->taskId);
+                        if (is_null($task)) {
+                            return true;
+                        }
+                        if (Yii::$app->params['user']->id !== $task->performer_id) {
+                            $result = true;
+                        }
+
                     }
 
                     return $result;
@@ -188,9 +207,14 @@ class TasksController extends SecuredController
         $this->redirect(Url::to(['tasks/view', 'id' => $id]));
     }
 
-    public function actionRefuse($id): void
+    public function actionRefuse(): void
     {
-        $task = Task::findOne($id);
+        $refuseForm = $this->getRefuse();
+        if (is_null($refuseForm)) {
+            $this->goHome();
+        }
+
+        $task = Task::findOne($refuseForm->taskId);
         if (is_null($task)) {
             throw new BadRequestHttpException();
         }
@@ -199,7 +223,17 @@ class TasksController extends SecuredController
             throw new BadRequestHttpException();
         }
 
-        $this->redirect(Url::to(['tasks/view', 'id' => $id]));
+        $this->redirect(Url::to(['tasks/view', 'id' => $refuseForm->taskId]));
     }
 
+    private function getRefuse(): ?RefuseForm
+    {
+        if (!$this->request->isPost) {
+            return null;
+        }
+
+        $refuseForm = new RefuseForm();
+        $refuseForm->load($this->request->post());
+        return $refuseForm;
+    }
 }

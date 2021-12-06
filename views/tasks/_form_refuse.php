@@ -1,9 +1,14 @@
 <?php
 
-use yii\helpers\Html;
+use app\models\Task;
+use yii\base\Model;
+use yii\bootstrap4\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
+/* @var $this View */
+/* @var $model Model */
+/* @var $task Task */
 
 ?>
 
@@ -19,6 +24,10 @@ use yii\widgets\ActiveForm;
             '/tasks/refuse',
         ],
     ]); ?>
+    <?= $form->field($model, 'taskId')
+        ->hiddenInput(['value' => $task->id])
+        ->label(false);
+    ?>
     <?= Html::submitButton('Отказаться', ['class' => 'button--blue']) ?>
     <?php $form = ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
