@@ -3,7 +3,7 @@
 namespace app\models\Buttons;
 
 use app\models\Bid;
-use yii\base\Model;
+use app\models\Modable;
 
 class BidButton extends Button
 {
@@ -44,7 +44,7 @@ class BidButton extends Button
         return true;
     }
 
-    public function createForm(): ?Model
+    public function createForm(): ?Modable
     {
         return new Bid();
     }

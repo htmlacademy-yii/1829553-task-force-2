@@ -2,16 +2,16 @@
 
 namespace app\models\Buttons;
 
+use app\models\Modable;
 use app\models\Status;
 use app\models\Task;
 use app\models\User;
-use yii\base\Model;
 
 class ButtonCreator
 {
     private Task $task;
     private User $user;
-    private Button $button;
+    private ?Button $button = null;
 
     public function __construct(Task $task, User $user)
     {
@@ -33,12 +33,6 @@ class ButtonCreator
             $allowedButtons = array_merge($allowedButtons, [new RefuseButton(), new FinishButton()]);
         }
 
-//        if (empty($allowedButtons)) {
-//            throw new ExceptionTask(
-//                'Could not get Action by status: ' . $this->task->status_id
-//            );
-//        }
-
         foreach ($allowedButtons as $button) {
             $button->setTask($this->task);
             $button->setUser($this->user);
@@ -49,8 +43,8 @@ class ButtonCreator
         return null;
     }
 
-    public function createForm(): ?Model
+    public function createForm(): ?Modable
     {
-        return $this->button->createForm();
+        return $this->button?->createForm();
     }
 }

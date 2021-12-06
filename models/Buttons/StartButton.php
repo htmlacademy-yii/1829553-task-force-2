@@ -2,7 +2,7 @@
 
 namespace app\models\Buttons;
 
-use yii\base\Model;
+use app\models\Modable;
 
 class StartButton extends Button
 {
@@ -38,8 +38,8 @@ class StartButton extends Button
         // TODO: Implement isModal() method.
     }
 
-    public function createForm(): ?Model
+    public function createForm(): ?Modable
     {
-        // TODO: Implement createForm() method.
+        return null;
     }
 }

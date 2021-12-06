@@ -2,7 +2,9 @@
 
 namespace app\models\Buttons;
 
-use yii\base\Model;
+use app\models\Modable;
+use app\models\RefuseForm;
+use JetBrains\PhpStorm\Pure;
 
 class RefuseButton extends Button
 {
@@ -38,8 +40,9 @@ class RefuseButton extends Button
         return true;
     }
 
-    public function createForm(): ?Model
+    #[Pure]
+    public function createForm(): ?Modable
     {
-        // TODO: Implement createForm() method.
+        return new RefuseForm();
     }
 }

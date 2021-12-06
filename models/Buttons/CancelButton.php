@@ -2,7 +2,7 @@
 
 namespace app\models\Buttons;
 
-use yii\base\Model;
+use app\models\Modable;
 use yii\helpers\Url;
 
 class CancelButton extends Button
@@ -40,7 +40,7 @@ class CancelButton extends Button
         return false;
     }
 
-    public function createForm(): ?Model
+    public function createForm(): ?Modable
     {
         return null;
     }

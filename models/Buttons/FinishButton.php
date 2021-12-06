@@ -2,7 +2,8 @@
 
 namespace app\models\Buttons;
 
-use yii\base\Model;
+use app\models\Modable;
+use app\models\Review;
 
 class FinishButton extends Button
 {
@@ -37,8 +38,8 @@ class FinishButton extends Button
         return true;
     }
 
-    public function createForm(): ?Model
+    public function createForm(): ?Modable
     {
-        // TODO: Implement createForm() method.
+        return new Review();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace app\models\Buttons;
 
+use app\models\Modable;
 use app\models\Task;
 use app\models\User;
 use yii\base\Model;
@@ -16,7 +17,7 @@ abstract class Button
     abstract public function checkPermissions(): bool;
     abstract public function getUrl(): string;
     abstract public function isModal(): bool;
-    abstract public function createForm(): ?Model;
+    abstract public function createForm(): ?Modable;
 
     public function setTask(Task $task): void
     {
