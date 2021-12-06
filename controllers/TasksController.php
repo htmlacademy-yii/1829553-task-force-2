@@ -17,6 +17,7 @@ use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
 use yii\db\Exception;
 use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
@@ -100,27 +101,28 @@ class TasksController extends SecuredController
     public function actionView($id)
     {
         $task = Task::findOne($id);
-        if (empty($task)) {
+        if (is_null($task)) {
             throw new NotFoundHttpException();
         }
 
         $buttonCreator = new ButtonCreator($task, Yii::$app->params['user']);
         $button = $buttonCreator->createButton();
         $formButton = $buttonCreator->createForm();
-
-        $r = Yii::$app->params['user'];
-
+        $renderedForm = null;
+        if ($formButton) {
+            $renderedForm = $this->renderPartial($formButton->getViewName(), ['model' => $formButton, 'task' => $task]);
+        }
         return $this->render(
             'view',
             [
                 'task' => $task,
                 'button' => $this->renderPartial('button', ['button' => $button]),
-                'form' => $this->renderPartial('//bids/_form', ['model' => $formButton, 'taskId' => $id]),
+                'form' => $renderedForm,
             ]
         );
     }
 
-    public function actionCreate()
+    public function actionCreate(): string
     {
         $model = new TaskForm();
         if ($this->request->isPost) {
@@ -128,10 +130,10 @@ class TasksController extends SecuredController
                 $model->load($this->request->post());
                 $model->filesSource = UploadedFile::getInstances($model, 'filesSource');
                 if (!$model->process()) {
-                    throw new Exception('Something goes wrong!');
+                    throw new BadRequestHttpException();
                 }
                 $task = $model->getTask();
-                return $this->redirect(['view', 'id' => $task->id]);
+                $this->redirect(['view', 'id' => $task->id]);
             }
             catch (ExceptionTask | ExceptionFile $exception) {
                 Yii::$app->session->setFlash('error', $exception->getMessage());
@@ -144,7 +146,7 @@ class TasksController extends SecuredController
         return $this->render('create', ['model' => $model, 'categories' => $humanCategories]);
     }
 
-    public function actionAcceptBid()
+    public function actionAcceptBid(): void
     {
         $this->validateParams();
 
@@ -152,9 +154,12 @@ class TasksController extends SecuredController
         $performerId = Yii::$app->request->get(Task::PERFORMER_ID);
 
         $task = Task::findOne($taskId);
+        if (is_null($task)) {
+            throw new BadRequestHttpException();
+        }
         $task->acceptBid($performerId);
         if (!$task->save()) {
-            throw new Exception('Something goes wrong!');
+            throw new BadRequestHttpException();
         }
 
         $this->redirect(Url::to(['tasks/view', 'id' => $taskId]));
@@ -164,17 +169,34 @@ class TasksController extends SecuredController
     {
         foreach ([Task::TASK_ID, Task::PERFORMER_ID] as $item) {
             if (empty(Yii::$app->request->get($item))) {
-                throw new Exception('Something goes wrong!');
+                throw new BadRequestHttpException('Something goes wrong!');
             }
         }
     }
 
-    public function actionCancel($id)
+    public function actionCancel($id): void
     {
         $task = Task::findOne($id);
+        if (is_null($task)) {
+            throw new BadRequestHttpException();
+        }
         $task->cancel();
         if (!$task->save()) {
-            throw new Exception('Something goes wrong!');
+            throw new BadRequestHttpException();
+        }
+
+        $this->redirect(Url::to(['tasks/view', 'id' => $id]));
+    }
+
+    public function actionRefuse($id): void
+    {
+        $task = Task::findOne($id);
+        if (is_null($task)) {
+            throw new BadRequestHttpException();
+        }
+        $task->refuse();
+        if (!$task->save()) {
+            throw new BadRequestHttpException();
         }
 
         $this->redirect(Url::to(['tasks/view', 'id' => $id]));
