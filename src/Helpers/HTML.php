@@ -4,8 +4,11 @@ namespace Mar4hk0\Helpers;
 
 class HTML
 {
-    public static function starts(float $rating, string $size = 'small'): string
+    public static function starts(?float $rating, string $size = 'small'): string
     {
+        if (is_null($rating)) {
+            return '';
+        }
         $output = '<div class="stars-rating ' . $size . '">';
         foreach(static::getStarts($rating) as $index => $isFill) {
             if ($isFill) {
