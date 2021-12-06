@@ -82,7 +82,7 @@ class Review extends \yii\db\ActiveRecord implements Modable
     {
         parent::afterSave($insert, $changedAttributes);
 
-        $this->performer->updateRating($this->grade);
+        $this->performer->updateRating();
     }
 
     /**

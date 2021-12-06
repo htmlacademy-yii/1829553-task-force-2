@@ -143,7 +143,7 @@ class Performer extends User
         return $msg;
     }
 
-    public function updateRating(int $grade): void
+    public function updateRating(): void
     {
         $this->rating = $this->getRatingValue();
         $this->save();
