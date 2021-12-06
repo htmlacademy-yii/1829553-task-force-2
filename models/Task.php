@@ -122,6 +122,16 @@ class Task extends \yii\db\ActiveRecord
         }
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($this->status_id == Status::getStatusFailedId() || $this->status_id == Status::getStatusCompletedId()) {
+            $this->performer->updateRating();
+        }
+
+    }
+
     /**
      * Gets query for [[Bids]].
      *
