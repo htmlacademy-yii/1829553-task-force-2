@@ -272,7 +272,7 @@ class Task extends \yii\db\ActiveRecord
         return false;
     }
 
-    public function acceptBid(int $performerId)
+    public function acceptBid(int $performerId): void
     {
         $this->status_id = Status::getStatusInProcessId();
         $this->performer_id = $performerId;
@@ -281,6 +281,16 @@ class Task extends \yii\db\ActiveRecord
     public function cancel(): void
     {
         $this->status_id = Status::getStatusCanceledId();
+    }
+
+    public function refuse(): void
+    {
+        $this->status_id = Status::getStatusFailedId();
+    }
+
+    public function finish(): void
+    {
+        $this->status_id = Status::getStatusCompletedId();
     }
 
 }
