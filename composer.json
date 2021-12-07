@@ -22,7 +22,8 @@
         "bizley/migration": "^4.3",
         "lasserafn/php-initial-avatar-generator": "^4.2",
         "kartik-v/yii2-widget-datepicker": "1.4.8",
-        "yiisoft/yii2-bootstrap4": "^2.0"
+        "yiisoft/yii2-bootstrap4": "^2.0",
+        "guzzlehttp/guzzle": "^7.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
