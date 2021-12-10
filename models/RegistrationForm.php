@@ -48,7 +48,7 @@ class RegistrationForm extends Model
         $user->email = $this->email;
         $user->city_id = $this->cityId;
         $user->setPassword($this->password);
-        $user->is_client = (boolean) $this->isClient;
+        $user->is_client = !(boolean) $this->isClient;
         $user->birthday = $this->birthday;
         $user->created = date('Y-m-d H:i:s');
         return $user->save();

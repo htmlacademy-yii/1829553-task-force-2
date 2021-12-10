@@ -7,8 +7,6 @@ use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
-use yii\bootstrap4\Nav;
-use yii\bootstrap4\NavBar;
 use yii\helpers\Url;
 
 AppAsset::register($this);
@@ -24,16 +22,16 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php if (Yii::$app->request->getPathInfo() != 'site/registration'): ?>
+<?php if (Yii::$app->request->getPathInfo() !== 'site/registration'): ?>
     <header class="page-header">
     <nav class="main-nav">
-        <a href='#' class="header-logo">
+        <a href='<?=Yii::$app->getHomeUrl()?>' class="header-logo">
             <img class="logo-image" src="/img/logotype.png" width=227 height=60 alt="taskforce">
         </a>
         <div class="nav-wrapper">
             <ul class="nav-list">
                 <li class="list-item list-item--active">
-                    <a class="link link--nav" >Новое</a>
+                    <a href="<?=Yii::$app->getHomeUrl()?>" class="link link--nav" >Новое</a>
                 </li>
                 <li class="list-item">
                     <a href="#" class="link link--nav" >Мои задания</a>
@@ -83,6 +81,7 @@ AppAsset::register($this);
     <?= Alert::widget() ?>
     <?= $content ?>
 </main>
+<div class="overlay"></div>
 <?php $this->endBody() ?>
 </body>
 </html>

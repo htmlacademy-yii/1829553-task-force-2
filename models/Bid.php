@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "bids".
  *
@@ -18,7 +16,7 @@ use Yii;
  * @property Performer $performer
  * @property Task $task
  */
-class Bid extends \yii\db\ActiveRecord
+class Bid extends \yii\db\ActiveRecord implements Modable
 {
     /**
      * {@inheritdoc}
@@ -36,10 +34,12 @@ class Bid extends \yii\db\ActiveRecord
         return [
             [['description', 'price', 'task_id', 'is_refused', 'performer_id', 'created'], 'required'],
             [['description'], 'string'],
-            [['price', 'task_id', 'is_refused', 'performer_id'], 'integer'],
-            [['created'], 'safe'],
+            [['is_refused'], 'boolean'],
+            [['price', 'task_id', 'performer_id'], 'integer'],
+            [['id', 'created'], 'safe'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['task_id' => 'id']],
             [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['performer_id' => 'id']],
+            ['price', 'integer', 'min' => 1],
         ];
     }
 
@@ -77,5 +77,15 @@ class Bid extends \yii\db\ActiveRecord
     public function getTask()
     {
         return $this->hasOne(Task::className(), ['id' => 'task_id']);
+    }
+
+    public function refuse(): void
+    {
+        $this->is_refused = true;
+    }
+
+    public function getViewName(): string
+    {
+        return '//bids/_form';
     }
 }

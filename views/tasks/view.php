@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Button;
 use app\models\Task;
 use Mar4hk0\Helpers\DateTimeHelper;
 use Mar4hk0\Helpers\Price;
@@ -9,6 +10,8 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $task Task */
+/* @var $button string */
+/* @var $form string */
 ?>
 <div class="left-column">
     <div class="head-wrapper">
@@ -16,7 +19,7 @@ use yii\helpers\Url;
         <p class="price price--big"><?=HTML::encode(Price::getPriceHuman($task->price));?></p>
     </div>
     <p class="task-description"><?=HTML::encode($task->description);?></p>
-    <a href="#" class="button button--blue">Откликнуться на задание</a>
+    <?= $button ?>
     <div class="task-map">
         <img class="map" src="/img/map.png"  width="725" height="346" alt="Новый арбат, 23, к. 1">
         <p class="map-address town">Москва</p>
@@ -24,9 +27,10 @@ use yii\helpers\Url;
     </div>
 
 
-    <?php if (!empty($task->bids)): ?>
+    <?php $bids = $task->getAllowedBids(Yii::$app->params['user']); ?>
+    <?php if (!empty($bids)): ?>
         <h4 class="head-regular">Отклики на задание</h4>
-        <?php foreach ($task->bids as $bid): ?>
+        <?php foreach ($bids as $bid): ?>
             <?php $performer = $bid->performer;?>
             <div class="response-card">
                 <img class="customer-photo" src="<?=HTML::encode($performer->getPathAvatar());?>"
@@ -51,10 +55,12 @@ use yii\helpers\Url;
                     </p>
                     <p class="price price--small"><?=Html::encode(Price::getPriceHuman($bid->price))?></p>
                 </div>
-                <div class="button-popup">
-                    <a href="#" class="button button--blue button--small">Принять</a>
-                    <a href="#" class="button button--orange button--small">Отказать</a>
-                </div>
+                <?php  if ($task->isShowButtonBids(Yii::$app->params['user'], $bid)): ?>
+                    <div class="button-popup">
+                        <a href="<?=Url::to(['tasks/accept-bid/', Task::TASK_ID => $bid->task_id, Task::PERFORMER_ID => $bid->performer_id])?>" class="button button--blue button--small">Принять</a>
+                        <a href="<?=Url::to(['bid/refuse', 'id' => $bid->id])?>" class="button button--orange button--small">Отказать</a>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -87,3 +93,4 @@ use yii\helpers\Url;
         </ul>
     </div>
 </div>
+<?= $form?>

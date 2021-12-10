@@ -2,9 +2,8 @@
 
 namespace app\models;
 
+use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
-use yii\base\Exception;
-use yii\i18n\Formatter;
 
 /**
  * This is the model class for table "tasks".
@@ -35,6 +34,10 @@ use yii\i18n\Formatter;
  */
 class Task extends \yii\db\ActiveRecord
 {
+
+    public const TASK_ID = 'task_id';
+    public const PERFORMER_ID = 'performer_id';
+
     public bool $remoteJob;
 
     /**
@@ -117,6 +120,16 @@ class Task extends \yii\db\ActiveRecord
         if (empty($this->city_id) || (empty($this->lat) && empty($this->long))) {
             $this->remoteJob = true;
         }
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($this->status_id == Status::getStatusFailedId() || $this->status_id == Status::getStatusCompletedId()) {
+            $this->performer->updateRating();
+        }
+
     }
 
     /**
@@ -237,6 +250,54 @@ class Task extends \yii\db\ActiveRecord
             ->indexBy('id')
             ->limit($num)
             ->all();
+    }
+
+    public function getAllowedBids(User $user): array
+    {
+        if ($this->client_id == $user->id && $user->is_client) {
+            return $this->bids;
+        }
+        if (!$user->is_client) {
+            foreach ($this->bids as $bid) {
+                if ($bid->performer_id == $user->id) {
+                    return [$bid];
+                }
+            }
+        }
+        return [];
+    }
+
+    public function isShowButtonBids(User $user, Bid $bid): bool
+    {
+        if ($bid->is_refused || $this->status_id != Status::getStatusNewId()) {
+            return false;
+        }
+        if ($this->client_id == $user->id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function acceptBid(int $performerId): void
+    {
+        $this->status_id = Status::getStatusInProcessId();
+        $this->performer_id = $performerId;
+    }
+
+    public function cancel(): void
+    {
+        $this->status_id = Status::getStatusCanceledId();
+    }
+
+    public function refuse(): void
+    {
+        $this->status_id = Status::getStatusFailedId();
+    }
+
+    public function finish(): void
+    {
+        $this->status_id = Status::getStatusCompletedId();
     }
 
 }

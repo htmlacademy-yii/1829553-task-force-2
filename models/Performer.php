@@ -108,17 +108,17 @@ class Performer extends User
         return $this->hasMany(PerformerCategories::className(), ['performer_id' => 'id']);
     }
 
-    public function getNumberTaskCompleted()
+    public function getNumberTaskCompleted(): ?int
     {
         return $this->getNumberTask(Status::STATUS_COMPLETED);
     }
 
-    public function getNumberTaskFailed()
+    public function getNumberTaskFailed(): ?int
     {
         return $this->getNumberTask(Status::STATUS_FAILED);
     }
 
-    public function getNumberTask(string $status)
+    public function getNumberTask(string $status): ?int
     {
         return $this->getTasks()->where(['status_id' => $status])->count();
     }
@@ -143,7 +143,7 @@ class Performer extends User
         return $msg;
     }
 
-    public function updateRating(int $grade): void
+    public function updateRating(): void
     {
         $this->rating = $this->getRatingValue();
         $this->save();

@@ -25,9 +25,9 @@ class AppAsset extends AssetBundle
         'css/normalize.css',
     ];
     public $js = [
-        'js/dropzone.js',
-        'js/landing.js',
+//        'js/dropzone.js',
+//        'js/landing.js',
         'js/main.js',
-        'js/messenger.js',
+//        'js/messenger.js',
     ];
 }
