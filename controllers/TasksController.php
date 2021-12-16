@@ -18,6 +18,7 @@ use Mar4hk0\Exceptions\ExceptionTask;
 use Yii;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
+use yii\web\JqueryAsset;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
@@ -131,6 +132,20 @@ class TasksController extends SecuredController
         if ($formButton) {
             $renderedForm = $this->renderPartial($formButton->getViewName(), ['model' => $formButton, 'task' => $task]);
         }
+
+        $apiKey = Yii::$app->params['apiGeoKey'];
+        $this->view->registerJsFile(
+            'https://api-maps.yandex.ru/2.1/?apikey=' . $apiKey . '&lang=ru_RU',
+            ['depends' => [JqueryAsset::class]]
+        );
+        $this->view->registerJsFile(
+            '@web/js/render_geo.js',
+            ['depends' => [JqueryAsset::class]]
+        );
+        $this->view->registerJsVar('lat', $task->lat);
+        $this->view->registerJsVar('long', $task->long);
+        $this->view->registerJsVar('address', $task->address);
+
         return $this->render(
             'view',
             [
