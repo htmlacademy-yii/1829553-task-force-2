@@ -18,6 +18,8 @@ class TaskForm extends Model
     public int $price = 0;
     public string $deadline = '';
     public array $filesSource = [];
+    public string $lat = '';
+    public string $long = '';
 
     private Task $task;
     private array $files;
@@ -34,7 +36,7 @@ class TaskForm extends Model
                 'targetClass' => Category::className(),
                 'targetAttribute' => ['categoryId' => 'id']],
             ['price', 'integer', 'min' => 1],
-            [['deadline', 'address', 'files'], 'safe'],
+            [['deadline', 'address', 'files', 'lat', 'long'], 'safe'],
 //            ['deadline ', 'datetime', 'format' => 'php:m/d/Y']
         ];
     }
@@ -57,8 +59,8 @@ class TaskForm extends Model
                     'client_id' => $user->id,
                     'deadline' => $this->deadline,
                     'address' => $this->address,
-                    'long' => '',
-                    'lat' => '',
+                    'long' => $this->long,
+                    'lat' => $this->lat,
                     'status_id' => Status::getStatusNewId(),
                     'created' => date('Y-m-d H:i:s'),
                 ];

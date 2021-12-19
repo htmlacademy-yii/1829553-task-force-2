@@ -21,9 +21,9 @@ use yii\helpers\Url;
     <p class="task-description"><?=HTML::encode($task->description);?></p>
     <?= $button ?>
     <div class="task-map">
-        <img class="map" src="/img/map.png"  width="725" height="346" alt="Новый арбат, 23, к. 1">
-        <p class="map-address town">Москва</p>
-        <p class="map-address">Новый арбат, 23, к. 1</p>
+        <div id="map" style="width: 725px; height: 346px"></div>
+        <p class="map-address town"><?=Html::encode($task->client->city->name)?></p>
+        <p class="map-address"><?=Html::encode($task->address)?></p>
     </div>
 
 

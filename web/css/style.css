@@ -1693,3 +1693,15 @@ form .has-error textarea:hover {
   background-color: #EFF3FF; }
 .modal-button:active {
   background-color: #DEE6FF; }
+
+.field-lat, .field-long {
+  display: none !important;
+}
+
+.new-file,
+#create-task #autoComplete,
+#create-task #description,
+#create-task {
+  width: 100%;
+}
+

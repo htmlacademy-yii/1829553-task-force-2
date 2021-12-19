@@ -56,6 +56,7 @@ $config = [
             'user/view/<id>' => 'user/view',
             'bid/refuse/<id>' => 'bid/refuse',
             'bid/create' => 'bid/create',
+            'ajax/geo/<address>' => 'ajax/get-geo',
         ],
     ],
     'formatter' => [

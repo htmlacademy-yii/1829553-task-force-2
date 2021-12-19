@@ -33,8 +33,16 @@ use yii\widgets\ActiveForm;
         ->label('Категория', ['class' => 'control-label']);
     ?>
     <?= $form->field($model, 'address')
-        ->textInput(['id' => 'location', 'class' => null])
+        ->textInput(
+            ['id' => 'autoComplete', 'class' => null, 'dir' => 'ltr', 'spellcheck' => false, 'autocorrect' => 'off', 'autocapitalize' => 'off']
+        )
         ->label('Локация', ['class' => 'control-label']);
+    ?>
+    <?= $form->field($model, 'lat')
+        ->textInput(['id' => 'lat', 'class' => null]);
+    ?>
+    <?= $form->field($model, 'long')
+        ->textInput(['id' => 'long', 'class' => null]);
     ?>
     <div class="half-wrapper">
         <?= $form->field($model, 'price')
