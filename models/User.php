@@ -36,6 +36,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
     public const CLIENT = true;
+    private const DEFAULT_AVATAR = 'avatar.png';
 
     /**
      * {@inheritdoc}
@@ -171,5 +172,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function validatePassword($password): bool
     {
         return \Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    public function getAvatar(): string
+    {
+        if (!empty($this->avatar)) {
+            return $this->avatar;
+        }
+
+        return self::DEFAULT_AVATAR;
     }
 }

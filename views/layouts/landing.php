@@ -54,10 +54,15 @@ LandingAsset::register($this);
             </div>
             <div class="header__account--index">
                 <a href="#" class="header__account-enter open-modal" data-for="enter-form">
-                    <span>Вход</span></a>
+                    <span>Вход</span>
+                </a>
                 или
                 <a href="<?=Url::to('/site/registration')?>" class="header__account-registration">
                     Регистрация
+                </a>
+                или
+                <a href="<?=Url::to(['site/auth', 'authclient' => 'vkontakte'])?>" class="header__account-authentication">
+                    <span>Войти через ВК</span>
                 </a>
             </div>
         </div>
