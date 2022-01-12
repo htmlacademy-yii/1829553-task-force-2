@@ -51,7 +51,7 @@ AppAsset::register($this);
         <?php $user = Yii::$app->params['user']; ?>
         <div class="user-block">
             <a href="#">
-                <img class="user-photo" src="<?=Yii::getAlias('@avatars') . '/' . $user->avatar ?>" width="55" height="55" alt="Аватар">
+                <img class="user-photo" src="<?=Yii::getAlias('@avatars') . '/' . $user->getAvatar() ?>" width="55" height="55" alt="Аватар">
             </a>
             <div class="user-menu">
                 <p class="user-name"><?=Html::encode($user->name)?></p>

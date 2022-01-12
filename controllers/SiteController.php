@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Auth;
+use app\models\User;
+use Exception;
 use Yii;
 use app\models\City;
 use app\models\LoginForm;
@@ -21,7 +24,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'login', 'registration'],
+                'only' => ['logout', 'login', 'registration', 'auth'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -35,6 +38,11 @@ class SiteController extends Controller
                     ],
                     [
                         'actions' => ['registration'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['auth'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -55,6 +63,10 @@ class SiteController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
             ],
         ];
     }
@@ -112,4 +124,72 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function onAuthSuccess($client)
+    {
+        $attributes = $client->getUserAttributes();
+
+        $condition = !empty($attributes['user_id']) && !empty($attributes['email'])
+            && !empty($attributes['city']) && !empty($attributes['city']['title']);
+
+        if (!$condition) {
+            throw new Exception('Something goes wrong!');
+        }
+
+        /* @var $auth Auth */
+        $auth = Auth::find()->where([
+            'vk_user_id' => $attributes['user_id'],
+        ])->one();
+
+        if (Yii::$app->user->isGuest) {
+            if ($auth) {
+                $user = $auth->user;
+                Yii::$app->user->login($user);
+            } else { // регистрация
+                if (isset($attributes['email']) && User::find()->where(['email' => $attributes['email']])->exists()) {
+                    throw new Exception(
+                        Yii::t(
+                            'app',
+                            "Пользователь с такой электронной почтой {email} уже существует.",
+                            ['email' => $attributes['email']]
+                        )
+                    );
+                } else {
+                    $password = Yii::$app->security->generateRandomString(6);
+                    $user = new User([
+                        'email' => $attributes['email'],
+                        'name' => $this->getName($attributes),
+                        'password' => $password,
+                        'birthday' => !empty($attributes['bdate']) ? date('Y-m-d H:i:s', strtotime($attributes['bdate'])): date('Y-m-d H:i:s'),
+                        'is_client' => true,
+                        'city_id' => City::getCityIdByName($attributes['city']['title']),
+                        'created' => date('Y-m-d H:i:s')
+                    ]);
+                    $transaction = $user->getDb()->beginTransaction();
+                    if ($user->save()) {
+                        $auth = new Auth([
+                            'user_id' => $user->id,
+                            'vk_user_id' => $attributes['user_id'],
+                        ]);
+                        if ($auth->save()) {
+                            $transaction->commit();
+                            Yii::$app->user->login($user);
+                        } else {
+                            throw new Exception('Something goes wrong!');
+                        }
+                    } else {
+                        throw new Exception('Something goes wrong!');
+                    }
+                }
+            }
+        }
+    }
+
+    private function getName(array $attributes): string
+    {
+        $result = 'Пользователь из VK';
+        if (!empty($attributes['first_name']) && !empty($attributes['last_name'])) {
+            $result = $attributes['first_name'] . ' ' . $attributes['last_name'];
+        }
+        return $result;
+    }
 }

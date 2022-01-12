@@ -81,4 +81,10 @@ class City extends \yii\db\ActiveRecord
     {
         return self::find()->where(['id' => $ids])->indexBy('id')->all();
     }
+
+    public static function getCityIdByName(string $name): ?int
+    {
+        $result = self::findOne(['name' => $name]);
+        return $result->id ?? null;
+    }
 }

@@ -66,6 +66,17 @@ $config = [
       'currencyCode' => 'EUR',
       'locale' => 'ru_Ru'
     ],
+    'authClientCollection' => [
+      'class' => 'yii\authclient\Collection',
+      'clients' => [
+          'vkontakte' => [
+              'class' => 'yii\authclient\clients\VKontakte',
+              'clientId' => '8047101',
+              'clientSecret' => 'jaEXhFjnwHlwmz7GKMw1',
+              'scope' => ['email']
+          ],
+      ],
+    ]
   ],
   'params' => $params,
 ];
